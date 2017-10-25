@@ -1,8 +1,14 @@
 ## Properties
-A Java library containing JavaFX like properties but without the binding.
-Because even in JavaFX bindings are available I usually don't use them but use
-listeners instead. Sometimes it's just neat to have properties available which
-was the reason to create this project.
+A Java library containing JavaFX like properties but without the bindings and
+without the dependencies on the JavaFX packages.
+
+Sometimes it can be very useful to have JavaFX like properties in environments
+where you don't have JavaFX available (e.g. Android).
+
+And because even in JavaFX bindings are available I usually don't use them but use
+listeners instead for me this is the easiest way of using properties without having
+JavaFX available. 
+
 With minor modifications they should also run on Android.
 
 There the following properties available:
