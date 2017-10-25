@@ -58,5 +58,7 @@ public abstract class ReadOnlyProperty<T extends Object> {
     public void removeListener(final ChangeEventListener LISTENER) { if (listenerList.contains(LISTENER)) listenerList.remove(LISTENER); }
     public void removeAllListeners() { listenerList.clear(); }
 
-    public void fireEvent(final ChangeEvent EVENT) { listenerList.forEach(listener -> listener.onChangeEvent(EVENT));}
+    public void fireEvent(final ChangeEvent EVENT) {
+        for (ChangeEventListener listener : listenerList) { listener.onChangeEvent(EVENT); }
+    }
 }

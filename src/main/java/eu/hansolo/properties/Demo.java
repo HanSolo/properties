@@ -52,11 +52,23 @@ public class Demo {
 
 
         // Register listeners
-        pojo.doubleValueProperty().setOnPropertyChanged(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        pojo.doubleValueProperty().setOnPropertyChanged(new ChangeEventListener() {
+            @Override public void onChangeEvent(final ChangeEvent e) {
+                System.out.println(e.getOldValue() + " -> " + e.getValue());
+            }
+        });
 
-        doubleProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        doubleProperty.addListener(new ChangeEventListener() {
+            @Override public void onChangeEvent(final ChangeEvent e) {
+                System.out.println(e.getOldValue() + " -> " + e.getValue());
+            }
+        });
 
-        objectProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        objectProperty.addListener(new ChangeEventListener() {
+            @Override public void onChangeEvent(final ChangeEvent e) {
+                System.out.println(e.getOldValue() + " -> " + e.getValue());
+            }
+        });
 
 
         // Set values
