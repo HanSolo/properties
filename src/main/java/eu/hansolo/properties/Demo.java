@@ -1,45 +1,42 @@
+/*
+ * Copyright (c) 2017 by Gerrit Grunwald
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package eu.hansolo.properties;
 
-import javafx.application.Application;
-import javafx.beans.binding.ObjectExpression;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.scene.layout.StackPane;
-import javafx.scene.Scene;
-
-import java.awt.geom.Point2D;
 
 
 /**
- * User: hansolo
- * Date: 24.10.17
- * Time: 13:30
+ * Created by hansolo on 24.10.17.
  */
-public class Demo extends Application {
+public class Demo {
     private PoJo                   pojo;
     private DoubleProperty         doubleProperty;
     private ObjectProperty<String> objectProperty;
-    private ObjectProperty<Color>  colorObjectProperty;
     private IntegerProperty        integerProperty;
     private DoubleProperty         doubleProperty1;
+    private ReadOnlyDoubleProperty readOnlyDoubleProperty;
 
 
-    @Override public void init() {
+    public Demo() {
         pojo = new PoJo();
 
+        // Setup properties
         doubleProperty = new DoubleProperty();
-        doubleProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
 
         objectProperty = new ObjectProperty();
-        objectProperty.set(new String("Hallo"));
-        objectProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
-
-        colorObjectProperty = new ObjectProperty<Color>(Color.RED) {
-            @Override protected void invalidated() { System.out.println("Color changed to: " + get()); }
-            @Override public Object getBean() { return Demo.this; }
-            @Override public String getName() { return "color"; }
-        };
-        colorObjectProperty.addListener(e -> System.out.println("Color property changed"));
 
         integerProperty = new IntegerProperty(10) {
             @Override public void set(final int VALUE) { super.set(VALUE); }
@@ -51,29 +48,28 @@ public class Demo extends Application {
 
         doubleProperty1 = new DoubleProperty(Demo.this, "oldValue", 10);
 
-    }
+        readOnlyDoubleProperty = new ReadOnlyDoubleProperty(5);
 
-    @Override public void start(Stage stage) {
-        StackPane pane = new StackPane();
 
-        Scene scene = new Scene(pane);
+        // Register listeners
+        pojo.doubleValueProperty().setOnPropertyChanged(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
 
-        stage.setTitle("Title");
-        stage.setScene(scene);
-        stage.show();
+        doubleProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+
+        objectProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+
+
+        // Set values
+        pojo.setDoubleValue(7);
 
         doubleProperty.set(20);
 
+        objectProperty.set(new String("Hallo"));
+
         objectProperty.set(new String("Test"));
-
-        colorObjectProperty.setValue(Color.BLUE);
-    }
-
-    @Override public void stop() {
-        System.exit(0);
     }
 
     public static void main(String[] args) {
-        launch(args);
+        new Demo();
     }
 }
