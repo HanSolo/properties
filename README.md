@@ -9,7 +9,8 @@ And because even in JavaFX bindings are available I usually don't use them but u
 listeners instead for me this is the easiest way of using properties without having
 JavaFX available. 
 
-With minor modifications they should also run on Android.
+If you would like to use it on Android just checkout the android branch. This branch
+contains the exact same code as the master branch but without using the Java 8 features.
 
 There the following properties available:
 - ByteProperty
