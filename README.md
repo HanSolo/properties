@@ -33,41 +33,33 @@ There the following properties available:
 - ReadOnlyObjectProperty
 
 On each property you can add remove event listeners as follows:
-```
-DoubleProperty value = new DoubleProperty(5);
-
-value.addListener(e -> System.out.println("Value changed from: " + 
-                                           e.getOldValue() + 
-                                           " to " + 
-                                           e.getValue()));
-                                           
-value.set(7);
-
-
-#> Value changed from: 5.0 to 7.0
-```
-
-## Demo usage
 ```Java
-public class PoJo {
-    private DoubleProperty  doubleValue;
-    private BooleanProperty booleanValue;
+// define a change listener
+ChangeEventListener doubleChangeEventListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
 
-    // ******************** Constructors **************************************
-    public PoJo() {
-        doubleValue  = new DoubleProperty();
-        booleanValue = new BooleanProperty();
+// define a property
+DoubleProperty doubleProperty = new DoubleProperty() {
+    @Override protected void willChange(final Double oldValue, final Double newValue) {
+        System.out.println("DoubleProperty will change from " + oldValue + " to " + newValue);
     }
-
-
-    // ******************** Methods *******************************************
-    public double getDoubleValue() { return doubleValue.get(); }
-    public void setDoubleValue(final double VALUE) { doubleValue.set(VALUE); }
-    public DoubleProperty doubleValueProperty() { return doubleValue; }
-
-    public boolean isBooleanValue() { return booleanValue.get(); }
-    public ReadOnlyBooleanProperty booleanValueProperty() {
-        return booleanValue;
+    @Override protected void didChange(final Double oldValue, final Double newValue) {
+        System.out.println("DoubleProperty changed from " + oldValue + " to " + newValue);
     }
-}
+};
+
+// adds given listener
+doubleProperty.setOnPropertyChanged(doubleChangeEventListener);
+
+// removes given listener
+doubleProperty.removeListener(doubleChangeEventListener);
+
+// removes all listeners
+doubleProperty.removeAllListeners();
+
+
+
+
+#> DoubleProperty will change from 0.0 to 20.0
+#> 0.0 -> 20.0
+#> DoubleProperty changed from 0.0 to 20.0
 ```

@@ -33,6 +33,8 @@ public class Demo {
     public Demo() {
         pojo = new PoJo();
 
+        ChangeEventListener doubleChangeEventListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
+
         // Setup properties
         doubleProperty = new DoubleProperty() {
             @Override protected void willChange(final Double oldValue, final Double newValue) {
@@ -42,6 +44,13 @@ public class Demo {
                 System.out.println("DoubleProperty changed from " + oldValue + " to " + newValue);
             }
         };
+
+        doubleProperty.setOnPropertyChanged(doubleChangeEventListener);
+
+        doubleProperty.removeListener(doubleChangeEventListener);
+
+        doubleProperty.removeAllListeners();
+
 
         objectProperty = new ObjectProperty();
 
