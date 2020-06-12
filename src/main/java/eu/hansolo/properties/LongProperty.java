@@ -25,20 +25,21 @@ public class LongProperty extends ReadOnlyLongProperty {
     public LongProperty() {
         super(null, null, 0l);
     }
-    public LongProperty(final long VALUE) {
-        super(null, null, VALUE);
+    public LongProperty(final long value) {
+        super(null, null, value);
     }
-    public LongProperty(final Object BEAN, final String NAME, final long VALUE) {
-        super(BEAN, NAME, VALUE);
+    public LongProperty(final Object bean, final String name, final long value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Long VALUE) {
-        final long OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Long value) {
+        willChange(this.value, value);
+        final long oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final long VALUE) { setValue(VALUE); }
+    public void set(final long value) { setValue(value); }
 }

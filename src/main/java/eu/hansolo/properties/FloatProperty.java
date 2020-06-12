@@ -25,20 +25,21 @@ public class FloatProperty extends ReadOnlyFloatProperty {
     public FloatProperty() {
         super(null, null, 0f);
     }
-    public FloatProperty(final float VALUE) {
-        super(null, null, VALUE);
+    public FloatProperty(final float value) {
+        super(null, null, value);
     }
-    public FloatProperty(final Object BEAN, final String NAME, final float VALUE) {
-        super(BEAN, NAME, VALUE);
+    public FloatProperty(final Object bean, final String name, final float value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Float VALUE) {
-        final float OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Float value) {
+        willChange(this.value, value);
+        final float oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final float VALUE) { setValue(VALUE); }
+    public void set(final float value) { setValue(value); }
 }

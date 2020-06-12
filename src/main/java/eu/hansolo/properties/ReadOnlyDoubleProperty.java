@@ -25,11 +25,11 @@ public class ReadOnlyDoubleProperty extends ReadOnlyProperty<Double> {
     public ReadOnlyDoubleProperty() {
         super(null, null, 0d);
     }
-    public ReadOnlyDoubleProperty(final double VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyDoubleProperty(final double value) {
+        super(null, null, value);
     }
-    public ReadOnlyDoubleProperty(final Object BEAN, final String NAME, final double VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyDoubleProperty(final Object bean, final String name, final double value) {
+        super(bean, name, value);
     }
 
 

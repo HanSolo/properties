@@ -25,11 +25,11 @@ public class ReadOnlyFloatProperty extends ReadOnlyProperty<Float> {
     public ReadOnlyFloatProperty() {
         super(null, null, 0f);
     }
-    public ReadOnlyFloatProperty(final float VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyFloatProperty(final float value) {
+        super(null, null, value);
     }
-    public ReadOnlyFloatProperty(final Object BEAN, final String NAME, final float VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyFloatProperty(final Object bean, final String name, final float value) {
+        super(bean, name, value);
     }
 
 

@@ -25,11 +25,11 @@ public class ReadOnlyByteProperty extends ReadOnlyProperty<Byte> {
     public ReadOnlyByteProperty() {
         super(null, null, (byte) 0);
     }
-    public ReadOnlyByteProperty(final byte VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyByteProperty(final byte value) {
+        super(null, null, value);
     }
-    public ReadOnlyByteProperty(final Object BEAN, final String NAME, final byte VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyByteProperty(final Object bean, final String name, final byte value) {
+        super(bean, name, value);
     }
 
 

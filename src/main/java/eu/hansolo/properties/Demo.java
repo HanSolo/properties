@@ -34,14 +34,21 @@ public class Demo {
         pojo = new PoJo();
 
         // Setup properties
-        doubleProperty = new DoubleProperty();
+        doubleProperty = new DoubleProperty() {
+            @Override protected void willChange(final Double oldValue, final Double newValue) {
+                System.out.println("DoubleProperty will change from " + oldValue + " to " + newValue);
+            }
+            @Override protected void didChange(final Double oldValue, final Double newValue) {
+                System.out.println("DoubleProperty changed from " + oldValue + " to " + newValue);
+            }
+        };
 
         objectProperty = new ObjectProperty();
 
         integerProperty = new IntegerProperty(10) {
             @Override public void set(final int VALUE) { super.set(VALUE); }
             @Override public int get() { return super.get(); }
-            @Override protected void invalidated() { System.out.println("Color changed to: " + get()); }
+            @Override protected void didChange(final Integer oldValue, final Integer newValue) { System.out.println("Color changed to: " + newValue); }
             @Override public Object getBean() { return Demo.this; }
             @Override public String getName() { return "color"; }
         };
@@ -71,5 +78,29 @@ public class Demo {
 
     public static void main(String[] args) {
         new Demo();
+    }
+
+
+
+    public class PoJo {
+        private DoubleProperty  doubleValue;
+        private BooleanProperty booleanValue;
+
+        // ******************** Constructors **************************************
+        public PoJo() {
+            doubleValue  = new DoubleProperty(3);
+            booleanValue = new BooleanProperty(true);
+        }
+
+
+        // ******************** Methods *******************************************
+        public double getDoubleValue() { return doubleValue.get(); }
+        public void setDoubleValue(final double value) { doubleValue.set(value); }
+        public DoubleProperty doubleValueProperty() { return doubleValue; }
+
+        public boolean isBooleanValue() { return booleanValue.get(); }
+        public ReadOnlyBooleanProperty booleanValueProperty() {
+            return booleanValue;
+        }
     }
 }

@@ -25,21 +25,22 @@ public class ByteProperty extends ReadOnlyByteProperty {
     public ByteProperty() {
         super(null, null, (byte) 0);
     }
-    public ByteProperty(final byte VALUE) {
-        super(null, null, VALUE);
+    public ByteProperty(final byte value) {
+        super(null, null, value);
     }
-    public ByteProperty(final Object BEAN, final String NAME, final byte VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ByteProperty(final Object bean, final String name, final byte value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Byte VALUE) {
-        final byte OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Byte value) {
+        willChange(this.value, value);
+        final byte oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final byte VALUE) { setValue(VALUE); }
+    public void set(final byte value) { setValue(value); }
 }
 

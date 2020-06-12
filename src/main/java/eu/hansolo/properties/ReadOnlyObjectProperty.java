@@ -25,11 +25,11 @@ public class ReadOnlyObjectProperty<T> extends ReadOnlyProperty<T> {
     public ReadOnlyObjectProperty() {
         super(null, null, null);
     }
-    public ReadOnlyObjectProperty(final T VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyObjectProperty(final T value) {
+        super(null, null, value);
     }
-    public ReadOnlyObjectProperty(final Object BEAN, final String NAME, final T VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyObjectProperty(final Object bean, final String name, final T value) {
+        super(bean, name, value);
     }
 
 

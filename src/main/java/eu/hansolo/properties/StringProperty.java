@@ -25,20 +25,21 @@ public class StringProperty extends ReadOnlyStringProperty {
     public StringProperty() {
         super(null, null, "");
     }
-    public StringProperty(final String VALUE) {
-        super(null, null, VALUE);
+    public StringProperty(final String value) {
+        super(null, null, value);
     }
-    public StringProperty(final Object BEAN, final String NAME, final String VALUE) {
-        super(BEAN, NAME, VALUE);
+    public StringProperty(final Object bean, final String name, final String value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final String VALUE) {
-        final String OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final String value) {
+        willChange(this.value, value);
+        final String oldValue = this.value;
+        this.value = value;
+        fireEvent(new ChangeEvent<>(this, oldValue, this.value));
+        didChange(oldValue, this.value);
     }
-    public void set(final String VALUE) { setValue(VALUE); }
+    public void set(final String value) { setValue(value); }
 }

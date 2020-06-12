@@ -20,23 +20,23 @@ package eu.hansolo.properties;
  * Created by hansolo on 24.10.17.
  */
 public class ChangeEvent<T extends Object> {
-    private final Object SRC;
-    private final T      OLD_VALUE;
-    private final T      VALUE;
+    private final Object src;
+    private final T oldValue;
+    private final T value;
 
 
     // ******************** Constructors **************************************
-    public ChangeEvent(final Object SRC, final T OLD_VALUE, final T VALUE) {
-        this.SRC       = SRC;
-        this.OLD_VALUE = OLD_VALUE;
-        this.VALUE     = VALUE;
+    public ChangeEvent(final Object src, final T oldValue, final T value) {
+        this.src      = src;
+        this.oldValue = oldValue;
+        this.value    = value;
     }
 
 
     // ******************** Methods *******************************************
-    public Object getSource() { return SRC; }
+    public Object getSource() { return src; }
 
-    public T getOldValue() { return OLD_VALUE; }
+    public T getOldValue() { return oldValue; }
 
-    public T getValue() { return VALUE; }
+    public T getValue() { return value; }
 }

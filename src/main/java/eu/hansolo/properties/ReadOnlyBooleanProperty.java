@@ -25,11 +25,11 @@ public class ReadOnlyBooleanProperty extends ReadOnlyProperty<Boolean> {
     public ReadOnlyBooleanProperty() {
         super(null, null, false);
     }
-    public ReadOnlyBooleanProperty(final boolean VALUE) {
-        super(null, null, Boolean.valueOf(VALUE));
+    public ReadOnlyBooleanProperty(final boolean value) {
+        super(null, null, Boolean.valueOf(value));
     }
-    public ReadOnlyBooleanProperty(final Object BEAN, final String NAME, final boolean VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyBooleanProperty(final Object bean, final String name, final boolean value) {
+        super(bean, name, value);
     }
 
 

@@ -25,20 +25,21 @@ public class CharProperty extends ReadOnlyCharProperty {
     public CharProperty() {
         super(null, null, ' ');
     }
-    public CharProperty(final char VALUE) {
-        super(null, null, VALUE);
+    public CharProperty(final char value) {
+        super(null, null, value);
     }
-    public CharProperty(final Object BEAN, final String NAME, final char VALUE) {
-        super(BEAN, NAME, VALUE);
+    public CharProperty(final Object bean, final String name, final char value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Character VALUE) {
-        final char OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Character value) {
+        willChange(this.value, value);
+        final char oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final char VALUE) { setValue(VALUE); }
+    public void set(final char value) { setValue(value); }
 }

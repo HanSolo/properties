@@ -25,20 +25,21 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     public DoubleProperty() {
         super(null, null, 0d);
     }
-    public DoubleProperty(final double VALUE) {
-        super(null, null, VALUE);
+    public DoubleProperty(final double value) {
+        super(null, null, value);
     }
-    public DoubleProperty(final Object BEAN, final String NAME, final double VALUE) {
-        super(BEAN, NAME, VALUE);
+    public DoubleProperty(final Object bean, final String name, final double value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Double VALUE) {
-        final double OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Double value) {
+        willChange(this.value, value);
+        final double oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
     public void set(final double VALUE) { setValue(VALUE); }
 }

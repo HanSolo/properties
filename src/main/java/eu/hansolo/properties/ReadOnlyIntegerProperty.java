@@ -25,11 +25,11 @@ public class ReadOnlyIntegerProperty extends ReadOnlyProperty<Integer> {
     public ReadOnlyIntegerProperty() {
         super(null, null, 0);
     }
-    public ReadOnlyIntegerProperty(final int VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyIntegerProperty(final int value) {
+        super(null, null, value);
     }
-    public ReadOnlyIntegerProperty(final Object BEAN, final String NAME, final int VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyIntegerProperty(final Object bean, final String name, final int value) {
+        super(bean, name, value);
     }
 
 

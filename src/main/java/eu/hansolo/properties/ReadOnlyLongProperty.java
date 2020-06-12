@@ -25,11 +25,11 @@ public class ReadOnlyLongProperty extends ReadOnlyProperty<Long> {
     public ReadOnlyLongProperty() {
         super(null, null, 0l);
     }
-    public ReadOnlyLongProperty(final long VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyLongProperty(final long value) {
+        super(null, null, value);
     }
-    public ReadOnlyLongProperty(final Object BEAN, final String NAME, final long VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyLongProperty(final Object bean, final String name, final long value) {
+        super(bean, name, value);
     }
 
 

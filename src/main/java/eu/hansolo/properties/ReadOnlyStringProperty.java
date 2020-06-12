@@ -25,11 +25,11 @@ public class ReadOnlyStringProperty extends ReadOnlyProperty<String> {
     public ReadOnlyStringProperty() {
         super(null, null, "");
     }
-    public ReadOnlyStringProperty(final String VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyStringProperty(final String value) {
+        super(null, null, value);
     }
-    public ReadOnlyStringProperty(final Object BEAN, final String NAME, final String VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyStringProperty(final Object bean, final String name, final String value) {
+        super(bean, name, value);
     }
 
 

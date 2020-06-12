@@ -22,30 +22,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by hansolo on 24.10.17.
  */
 public abstract class ReadOnlyProperty<T extends Object> {
-    protected final CopyOnWriteArrayList<ChangeEventListener> listenerList = new CopyOnWriteArrayList<>();
-    protected       Object  bean;
-    protected       String  name;
-    protected       T       value;
+    protected CopyOnWriteArrayList<ChangeEventListener> listenerList;
+    protected Object  bean;
+    protected String  name;
+    protected T       value;
 
 
     // ******************** Constructors **************************************
     public ReadOnlyProperty() {
         this(null, null, null);
     }
-    public ReadOnlyProperty(final T VALUE) {
-        this(null, null, VALUE);
+    public ReadOnlyProperty(final T value) {
+        this(null, null, value);
     }
-    public ReadOnlyProperty(final Object BEAN, final String NAME, final T VALUE) {
-        bean     = BEAN;
-        name     = NAME;
-        value    = VALUE;
+    public ReadOnlyProperty(final Object bean, final String name, final T value) {
+        this.bean  = bean;
+        this.name  = name;
+        this.value = value;
     }
 
 
     // ******************** Methods *******************************************
     public final T getValue() { return value; }
 
-    protected void invalidated() {}
+    protected void willChange(final T oldValue, final T newValue) {}
+
+    protected void didChange(final T oldValue, final T newValue) {}
 
     public Object getBean() { return bean; }
 
@@ -53,10 +55,22 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
 
     // ******************** Event Handling ************************************
-    public void setOnPropertyChanged(final ChangeEventListener LISTENER) { addListener(LISTENER); }
-    public void addListener(final ChangeEventListener LISTENER) { if (!listenerList.contains(LISTENER)) listenerList.add(LISTENER); }
-    public void removeListener(final ChangeEventListener LISTENER) { if (listenerList.contains(LISTENER)) listenerList.remove(LISTENER); }
-    public void removeAllListeners() { listenerList.clear(); }
+    public void setOnPropertyChanged(final ChangeEventListener listener) { addListener(listener); }
+    public void addListener(final ChangeEventListener listener) {
+        if (null == listenerList) { listenerList = new CopyOnWriteArrayList<>(); }
+        if (!listenerList.contains(listener)) listenerList.add(listener);
+    }
+    public void removeListener(final ChangeEventListener listener) {
+        if (null == listenerList) { return; }
+        if (listenerList.contains(listener)) listenerList.remove(listener);
+    }
+    public void removeAllListeners() {
+        if (null == listenerList) { return; }
+        listenerList.clear();
+    }
 
-    public void fireEvent(final ChangeEvent EVENT) { listenerList.forEach(listener -> listener.onChangeEvent(EVENT));}
+    public void fireEvent(final ChangeEvent event) {
+        if (null == listenerList) { listenerList = new CopyOnWriteArrayList<>(); }
+        listenerList.forEach(listener -> listener.onChangeEvent(event));
+    }
 }

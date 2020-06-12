@@ -25,11 +25,11 @@ public class ReadOnlyShortProperty extends ReadOnlyProperty<Short> {
     public ReadOnlyShortProperty() {
         super(null, null, (short) 0);
     }
-    public ReadOnlyShortProperty(final short VALUE) {
-        super(null, null, VALUE);
+    public ReadOnlyShortProperty(final short value) {
+        super(null, null, value);
     }
-    public ReadOnlyShortProperty(final Object BEAN, final String NAME, final short VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ReadOnlyShortProperty(final Object bean, final String name, final short value) {
+        super(bean, name, value);
     }
 
 

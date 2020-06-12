@@ -25,20 +25,21 @@ public class ShortProperty extends ReadOnlyShortProperty {
     public ShortProperty() {
         super(null, null, (short) 0);
     }
-    public ShortProperty(final short VALUE) {
-        super(null, null, VALUE);
+    public ShortProperty(final short value) {
+        super(null, null, value);
     }
-    public ShortProperty(final Object BEAN, final String NAME, final short VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ShortProperty(final Object bean, final String name, final short value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Short VALUE) {
-        final short OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Short value) {
+        willChange(this.value, value);
+        final short oldValue = this.value;
+        this.value = value;
+        fireEvent(new ChangeEvent<>(this, oldValue, this.value));
+        didChange(oldValue, this.value);
     }
-    public void set(final short VALUE) { setValue(VALUE); }
+    public void set(final short value) { setValue(value); }
 }

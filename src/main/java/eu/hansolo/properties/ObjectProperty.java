@@ -25,21 +25,22 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
     public ObjectProperty() {
         super(null, null, null);
     }
-    public ObjectProperty(final T VALUE) {
-        super(null, null, VALUE);
+    public ObjectProperty(final T value) {
+        super(null, null, value);
     }
-    public ObjectProperty(final Object BEAN, final String NAME, final T VALUE) {
-        super(BEAN, NAME, VALUE);
+    public ObjectProperty(final Object bean, final String name, final T value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final T VALUE) {
-        final T OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final T value) {
+        willChange(this.value, value);
+        final T oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final T VALUE) { setValue(VALUE); }
+    public void set(final T value) { setValue(value); }
 }
 

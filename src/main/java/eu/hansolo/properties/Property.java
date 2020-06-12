@@ -26,21 +26,22 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
     public Property() {
         this(null, null, null);
     }
-    public Property(final T VALUE) {
-        this(null, null, VALUE);
+    public Property(final T value) {
+        this(null, null, value);
     }
-    public Property(final Object BEAN, final String NAME, final T VALUE) {
-        bean     = BEAN;
-        name     = NAME;
-        value    = VALUE;
+    public Property(final Object bean, final String name, final T value) {
+        this.bean = bean;
+        this.name = name;
+        this.value = value;
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final T VALUE) {
-        final T OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final T value) {
+        willChange(this.value, value);
+        final T oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
 }

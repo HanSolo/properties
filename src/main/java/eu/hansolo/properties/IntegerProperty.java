@@ -25,20 +25,21 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
     public IntegerProperty() {
         super(null, null, 0);
     }
-    public IntegerProperty(final int VALUE) {
-        super(null, null, VALUE);
+    public IntegerProperty(final int value) {
+        super(null, null, value);
     }
-    public IntegerProperty(final Object BEAN, final String NAME, final int VALUE) {
-        super(BEAN, NAME, VALUE);
+    public IntegerProperty(final Object bean, final String name, final int value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Integer VALUE) {
-        final int OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Integer value) {
+        willChange(this.value, value);
+        final int oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(oldValue, this.value);
     }
-    public void set(final int VALUE) { setValue(VALUE); }
+    public void set(final int value) { setValue(value); }
 }

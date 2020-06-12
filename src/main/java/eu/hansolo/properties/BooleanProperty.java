@@ -25,20 +25,21 @@ public class BooleanProperty extends ReadOnlyBooleanProperty {
     public BooleanProperty() {
         super(null, null, false);
     }
-    public BooleanProperty(final boolean VALUE) {
-        super(null, null, Boolean.valueOf(VALUE));
+    public BooleanProperty(final boolean value) {
+        super(null, null, Boolean.valueOf(value));
     }
-    public BooleanProperty(final Object BEAN, final String NAME, final boolean VALUE) {
-        super(BEAN, NAME, VALUE);
+    public BooleanProperty(final Object bean, final String name, final boolean value) {
+        super(bean, name, value);
     }
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Boolean VALUE) {
-        final boolean OLD_VALUE = value;
-        value = VALUE;
-        invalidated();
-        fireEvent(new ChangeEvent<>(this, OLD_VALUE, value));
+    protected void setValue(final Boolean value) {
+        willChange(this.value, value);
+        final boolean oldValue = this.value;
+        this.value = value;
+        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        didChange(this.value, value);
     }
-    public void set(final boolean VALUE) { setValue(VALUE); }
+    public void set(final boolean value) { setValue(value); }
 }

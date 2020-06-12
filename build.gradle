@@ -1,30 +1,172 @@
-/*
- * Copyright (c) 2017 by Gerrit Grunwald
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+import java.text.SimpleDateFormat
 
-group 'eu.hansolo'
-version '1.0'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.3.1'
+    }
+}
 
-apply plugin: 'java'
+// TilesFX main build file
+plugins {
+    id 'idea'
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.nemerosa.versioning' version '2.10.0'
+    id 'com.jfrog.bintray' version '1.8.5'
+}
 
-sourceCompatibility = 1.8
+apply plugin: 'biz.aQute.bnd.builder'
 
-repositories {
-    mavenCentral()
+sourceCompatibility = '11'
+
+wrapper {
+    gradleVersion = '6.4'
+}
+
+description = 'Properties inspired by the JavaFX properties but without bindings'
+
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
 }
 
 dependencies {
+}
 
+// Supress javadoc warnings
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Built-By'              : System.properties['user.name'],
+                'Created-By'            : System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+                'Build-Date'            : project.buildDate,
+                'Build-Time'            : project.buildTime,
+                'Build-Revision'        : versioning.info.commit,
+                'Specification-Title'   : project.name,
+                'Specification-Version' : project.version,
+                'Implementation-Title'  : project.name,
+                'Implementation-Version': project.version,
+                'Bundle-Name'           : project.name,
+                'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://www.eclipse.org/legal/eplfaq.php',
+                'Bundle-Description'    : description,
+                'Bundle-SymbolicName'   : 'eu.hansolo.properties',
+                'Export-Package'        : 'eu.hansolo.properties'
+        )
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+// start the demo from gradle
+task Demo(type: JavaExec) {
+    main = "eu.hansolo.properties.Demo"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+// create one jar for the javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// create one jar for the source files
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives sourcesJar
+}
+
+def pomConfig = {
+    name 'properties'
+    // Description won't be used when creating the pom file automatically.
+    // So I've added it manually in the pom.withXml{} section in the publishing task
+    url 'https://github.com/HanSolo/properties/wiki'
+    inceptionYear '2020'
+    licenses {
+        license([:]) {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
+    scm {
+        url 'scm:git@github.com:HanSolo/properties.git'
+        connection 'scm:git@github.com:HanSolo/properties.git'
+        developerConnection 'scm:git@github.com:HanSolo/properties.git'
+    }
+    developers {
+        developer {
+            id 'HanSolo'
+            name 'Gerrit Grunwald'
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                asNode().children().last() + pomConfig
+                asNode().appendNode('description', description)
+            }
+        }
+    }
+}
+
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
+if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
+if (!project.hasProperty('sonatypeUsername')) ext.sonatypeUsername = ''
+if (!project.hasProperty('sonatypePassword')) ext.sonatypePassword = ''
+
+
+bintray {
+    user = project.bintrayUsername
+    key  = project.bintrayApiKey
+    publications = ['mavenCustom']
+    pkg {
+        repo                  = 'Properties'
+        userOrg               = 'hansolo'
+        name                  = project.name
+        desc                  = description
+        licenses              = ['Apache-2.0']
+        labels                = ['java']
+        websiteUrl            = 'https://github.com/HanSolo/properties/wiki'
+        issueTrackerUrl       = 'https://github.com/HanSolo/properties/issues'
+        vcsUrl                = 'git@github.com:HanSolo/properties.git'
+        publicDownloadNumbers = true
+        version {
+            name   = project.version
+            vcsTag = project.version
+            mavenCentralSync {
+                sync = true
+                user = project.sonatypeUsername
+                password = project.sonatypePassword
+                close = '1'
+            }
+        }
+    }
 }
