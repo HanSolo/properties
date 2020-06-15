@@ -16,10 +16,12 @@
 
 package eu.hansolo.properties;
 
-/**
- * Created by hansolo on 24.10.17.
- */
+
 public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
+    protected ObjectProperty<T> propertyToUpdate;
+    protected boolean           bound;
+    protected boolean           bidirectional;
+
 
     // ******************** Constructors **************************************
     public ObjectProperty() {
@@ -34,13 +36,51 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final T value) {
+    public void setValue(final T value) {
+        if (bound && !bidirectional) { throw new IllegalArgumentException("A bound value cannot be set."); }
+        setValue(value, null);
+    }
+    public void set(final T value) { setValue(value); }
+    protected void setValue(final T value, final ObjectProperty<T> property) {
         willChange(this.value, value);
         final T oldValue = this.value;
         this.value = value;
-        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        if (null == property && null != this.propertyToUpdate) {
+            this.propertyToUpdate.setValue(value, this);
+        }
+        fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
     }
-    public void set(final T value) { setValue(value); }
+
+    protected void bind(final ObjectProperty<T> property) {
+        this.value = property.getValue();
+        property.setPropertyToUpdate(this);
+        propertyToUpdate = null;
+        bound            = true;
+        bidirectional    = false;
+    }
+    protected void bindBidirectional(final ObjectProperty<T> property) {
+        setPropertyToUpdate(property);
+        property.setPropertyToUpdate(this);
+        this.bound         = true;
+        this.bidirectional = true;
+    }
+    protected boolean isBound() { return this.bound; }
+
+    protected void unbind() {
+        this.propertyToUpdate = null;
+        this.bound            = false;
+        this.bidirectional    = false;
+    }
+
+    protected void setPropertyToUpdate(final ObjectProperty<T> property) {
+        setPropertyToUpdate(property, false);
+    }
+    protected void setPropertyToUpdate(final ObjectProperty<T> property, final boolean bidirectional) {
+        this.propertyToUpdate = property;
+        this.value            = property.getValue();
+        this.bound            = true;
+        this.bidirectional    = true;
+    }
 }
 

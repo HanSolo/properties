@@ -18,14 +18,12 @@ package eu.hansolo.properties;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * Created by hansolo on 24.10.17.
- */
+
 public abstract class ReadOnlyProperty<T extends Object> {
     protected CopyOnWriteArrayList<ChangeEventListener> listenerList;
-    protected Object  bean;
-    protected String  name;
-    protected T       value;
+    protected Object                                    bean;
+    protected String                                    name;
+    protected T                                         value;
 
 
     // ******************** Constructors **************************************

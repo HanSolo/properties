@@ -16,10 +16,12 @@
 
 package eu.hansolo.properties;
 
-/**
- * Created by hansolo on 24.10.17.
- */
+
 public class ByteProperty extends ReadOnlyByteProperty {
+    protected ByteProperty propertyToUpdate;
+    protected boolean      bound;
+    protected boolean      bidirectional;
+
 
     // ******************** Constructors **************************************
     public ByteProperty() {
@@ -34,13 +36,51 @@ public class ByteProperty extends ReadOnlyByteProperty {
 
 
     // ******************** Methods *******************************************
-    protected void setValue(final Byte value) {
+    public void setValue(final Byte value) {
+        if (bound && !bidirectional) { throw new IllegalArgumentException("A bound value cannot be set."); }
+        setValue(value, null);
+    }
+    public void set(final byte value) { setValue(value); }
+    protected void setValue(final Byte value, final ByteProperty property) {
         willChange(this.value, value);
         final byte oldValue = this.value;
         this.value = value;
-        if (null != listenerList && !listenerList.isEmpty()) { fireEvent(new ChangeEvent<>(this, oldValue, this.value)); }
+        if (null == property && null != this.propertyToUpdate) {
+            this.propertyToUpdate.setValue(value, this);
+        }
+        fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
     }
-    public void set(final byte value) { setValue(value); }
+
+    protected void bind(final ByteProperty property) {
+        this.value = property.getValue();
+        property.setPropertyToUpdate(this);
+        propertyToUpdate = null;
+        bound            = true;
+        bidirectional    = false;
+    }
+    protected void bindBidirectional(final ByteProperty property) {
+        setPropertyToUpdate(property);
+        property.setPropertyToUpdate(this);
+        this.bound         = true;
+        this.bidirectional = true;
+    }
+    protected boolean isBound() { return this.bound; }
+
+    protected void unbind() {
+        this.propertyToUpdate = null;
+        this.bound            = false;
+        this.bidirectional    = false;
+    }
+
+    protected void setPropertyToUpdate(final ByteProperty property) {
+        setPropertyToUpdate(property, false);
+    }
+    protected void setPropertyToUpdate(final ByteProperty property, final boolean bidirectional) {
+        this.propertyToUpdate = property;
+        this.value            = property.getValue();
+        this.bound            = true;
+        this.bidirectional    = true;
+    }
 }
 

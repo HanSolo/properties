@@ -17,10 +17,6 @@
 package eu.hansolo.properties;
 
 
-
-/**
- * Created by hansolo on 24.10.17.
- */
 public class Demo {
     private PoJo                   pojo;
     private DoubleProperty         doubleProperty;
@@ -83,6 +79,49 @@ public class Demo {
         objectProperty.set(new String("Hallo"));
 
         objectProperty.set(new String("Test"));
+
+
+        // Bindings unidirectional
+        System.out.println("\n\n---------- Unidirectional Binding ------------");
+        DoubleProperty propertyA = new DoubleProperty(5);
+        DoubleProperty propertyB = new DoubleProperty(10);
+
+        System.out.println("Property A: " + propertyA.get() + " is bound: " + propertyA.isBound());
+        System.out.println("Property B: " + propertyB.get() + " is bound: " + propertyB.isBound());
+        System.out.println("\npropertyA.bind(propertyB)");
+        propertyA.bind(propertyB);
+        System.out.println("\nProperty A: " + propertyA.get() + " is bound: " + propertyA.isBound());
+        System.out.println("Property B: " + propertyB.get() + " is bound: " + propertyB.isBound());
+        System.out.println("\npropertyB.set(5)");
+        propertyB.set(5);
+        System.out.println("\npropertyB = " + propertyB.get());
+        System.out.println("propertyA = " + propertyA.get());
+        System.out.println("propertyA.set(20)");
+        try {
+            propertyA.set(20);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error, a bound value cannot be set.");
+        }
+
+        // Bindings bidirectional
+        System.out.println("\n\n---------- Bidirectional Binding ------------");
+        DoubleProperty propertyC = new DoubleProperty(0);
+        DoubleProperty propertyD = new DoubleProperty(25);
+
+        System.out.println("Property C: " + propertyC.get() + " is bound: " + propertyC.isBound());
+        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\npropertyA.bindBidirectional(propertyB)");
+        propertyC.bindBidirectional(propertyD);
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
+        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\npropertyD.set(5)");
+        propertyD.set(5);
+        System.out.println("\npropertyC = " + propertyC.get());
+        System.out.println("propertyD = " + propertyD.get());
+        System.out.println("\npropertyC.set(20)");
+        propertyC.set(20);
+        System.out.println("\npropertyC = " + propertyC.get());
+        System.out.println("propertyD = " + propertyD.get());
     }
 
     public static void main(String[] args) {
