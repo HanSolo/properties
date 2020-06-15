@@ -109,44 +109,32 @@ System.out.println("\n\n---------- Bidirectional Binding ------------");
 DoubleProperty propertyC = new DoubleProperty(0);
 DoubleProperty propertyD = new DoubleProperty(25);
 
-System.out.println("Property C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
-
+System.out.println("Property C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
 System.out.println("\npropertyC.bindBidirectional(propertyD)");
 propertyC.bindBidirectional(propertyD);
-
-System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
-
+System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
 System.out.println("\npropertyD.set(5)");
 propertyD.set(5);
-
 System.out.println("\npropertyC = " + propertyC.get());
 System.out.println("propertyD = " + propertyD.get());
-
 System.out.println("\npropertyC.set(20)");
 propertyC.set(20);
-
 System.out.println("\npropertyC = " + propertyC.get());
 System.out.println("propertyD = " + propertyD.get());
-
 System.out.println("\npropertyD.unbind()");
 propertyD.unbind();
-
-System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
-
+System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
 System.out.println("\npropertyD.set(5)");
 propertyD.set(5);
-
-System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
-
+System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
 System.out.println("\npropertyC.set(10)");
 propertyC.set(10);
-
-System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
 ````
 
 The output on the console of the above code looks like follows...
@@ -181,13 +169,13 @@ Property B: 15.0 is bound: false
 
 
 ---------- Bidirectional Binding ------------
-Property C: 0.0 is bound: false
-Property D: 25.0 is bound: false
+Property C: 0.0 is bound bidirectional: false
+Property D: 25.0 is bound bidirectional: false
 
 propertyC.bindBidirectional(propertyD)
 
-Property C: 25.0 is bound: true
-Property D: 25.0 is bound: true
+Property C: 25.0 is bound bidirectional: true
+Property D: 25.0 is bound bidirectional: true
 
 propertyD.set(5)
 
@@ -201,16 +189,18 @@ propertyD = 20.0
 
 propertyD.unbind()
 
-Property C: 20.0 is bound: false
-Property D: 20.0 is bound: false
+Property C: 20.0 is bound bidirectional: false
+Property D: 20.0 is bound bidirectional: false
 
 propertyD.set(5)
 
-Property C: 20.0 is bound: false
-Property D: 5.0 is bound: false
+Property C: 20.0 is bound bidirectional: false
+Property D: 5.0 is bound bidirectional: false
 
 propertyC.set(10)
 
-Property C: 10.0 is bound: false
-Property D: 5.0 is bound: false
+Property C: 10.0 is bound bidirectional: false
+Property D: 5.0 is bound bidirectional: false
+
+Process finished with exit code 0
 ```
