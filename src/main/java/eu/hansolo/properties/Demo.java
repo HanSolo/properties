@@ -34,10 +34,10 @@ public class Demo {
         // Setup properties
         doubleProperty = new DoubleProperty() {
             @Override protected void willChange(final Double oldValue, final Double newValue) {
-                System.out.println("DoubleProperty will change from " + oldValue + " to " + newValue);
+                System.out.println("\nDoubleProperty will change from " + oldValue + " to " + newValue + "\n");
             }
             @Override protected void didChange(final Double oldValue, final Double newValue) {
-                System.out.println("DoubleProperty changed from " + oldValue + " to " + newValue);
+                System.out.println("\nDoubleProperty changed from " + oldValue + " to " + newValue + "\n");
             }
         };
 
@@ -79,6 +79,8 @@ public class Demo {
         objectProperty.set(new String("Hallo"));
 
         objectProperty.set(new String("Test"));
+
+        objectProperty.set("Bla");
 
 
         // Bindings unidirectional
