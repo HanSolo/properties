@@ -31,7 +31,7 @@ public class Demo {
         pojo.valueProperty().addListener(evt -> System.out.println("Value changed from " + evt.getOldValue() + " to " + evt.getValue()));
 
 
-        ChangeListener doubleChangeListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
+        ChangeListener<ChangeEvent<Double>> doubleChangeListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
 
         // Setup properties
         doubleProperty = new DoubleProperty() {
