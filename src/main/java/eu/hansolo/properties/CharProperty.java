@@ -26,10 +26,13 @@ public class CharProperty extends ReadOnlyCharProperty {
 
     // ******************** Constructors **************************************
     public CharProperty() {
-        super(null, null, ' ');
+        this(null, null, ' ');
     }
     public CharProperty(final char value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public CharProperty(final String name, final char value) {
+        this(null, name, value);
     }
     public CharProperty(final Object bean, final String name, final char value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class CharProperty extends ReadOnlyCharProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final CharProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

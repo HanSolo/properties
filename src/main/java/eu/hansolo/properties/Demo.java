@@ -29,7 +29,7 @@ public class Demo {
     public Demo() {
         pojo = new PoJo();
 
-        ChangeEventListener doubleChangeEventListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
+        ChangeListener doubleChangeListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
 
         // Setup properties
         doubleProperty = new DoubleProperty() {
@@ -41,9 +41,9 @@ public class Demo {
             }
         };
 
-        doubleProperty.setOnPropertyChanged(doubleChangeEventListener);
+        doubleProperty.setOnPropertyChanged(doubleChangeListener);
 
-        doubleProperty.removeListener(doubleChangeEventListener);
+        doubleProperty.removeListener(doubleChangeListener);
 
         doubleProperty.removeAllListeners();
 
@@ -118,12 +118,12 @@ public class Demo {
         DoubleProperty propertyC = new DoubleProperty(0);
         DoubleProperty propertyD = new DoubleProperty(25);
 
-        System.out.println("Property C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("Property C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+        System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
         System.out.println("\npropertyC.bindBidirectional(propertyD)");
         propertyC.bindBidirectional(propertyD);
-        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+        System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
         System.out.println("\npropertyD.set(5)");
         propertyD.set(5);
         System.out.println("\npropertyC = " + propertyC.get());
@@ -134,16 +134,16 @@ public class Demo {
         System.out.println("propertyD = " + propertyD.get());
         System.out.println("\npropertyD.unbind()");
         propertyD.unbind();
-        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+        System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
         System.out.println("\npropertyD.set(5)");
         propertyD.set(5);
-        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+        System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
         System.out.println("\npropertyC.set(10)");
         propertyC.set(10);
-        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
-        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound bidirectional: " + propertyC.isBoundBidirectional());
+        System.out.println("Property D: " + propertyD.get() + " is bound bidirectional: " + propertyD.isBoundBidirectional());
     }
 
     public static void main(String[] args) {

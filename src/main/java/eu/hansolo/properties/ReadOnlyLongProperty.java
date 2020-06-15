@@ -16,9 +16,7 @@
 
 package eu.hansolo.properties;
 
-/**
- * Created by hansolo on 24.10.17.
- */
+
 public class ReadOnlyLongProperty extends ReadOnlyProperty<Long> {
 
     // ******************** Constructors **************************************

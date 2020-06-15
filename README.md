@@ -31,7 +31,7 @@ There the following properties available:
 On each property you can add remove event listeners as follows:
 ```Java
 // define a change listener
-ChangeEventListener doubleChangeEventListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
+ChangeEventListener doubleChangeListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
 
 // define a property
 DoubleProperty doubleProperty = new DoubleProperty() {
@@ -44,10 +44,10 @@ DoubleProperty doubleProperty = new DoubleProperty() {
 };
 
 // adds given listener
-doubleProperty.setOnPropertyChanged(doubleChangeEventListener);
+doubleProperty.setOnPropertyChanged(doubleChangeListener);
 
 // removes given listener
-doubleProperty.removeListener(doubleChangeEventListener);
+doubleProperty.removeListener(doubleChangeListener);
 
 // removes all listeners
 doubleProperty.removeAllListeners();

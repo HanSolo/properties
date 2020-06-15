@@ -26,10 +26,13 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
 
     // ******************** Constructors **************************************
     public IntegerProperty() {
-        super(null, null, 0);
+        this(null, null, 0);
     }
     public IntegerProperty(final int value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public IntegerProperty(final String name, final int value) {
+        this(null, name, value);
     }
     public IntegerProperty(final Object bean, final String name, final int value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final IntegerProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

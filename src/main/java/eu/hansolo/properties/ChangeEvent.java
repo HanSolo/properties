@@ -16,13 +16,11 @@
 
 package eu.hansolo.properties;
 
-/**
- * Created by hansolo on 24.10.17.
- */
+
 public class ChangeEvent<T extends Object> {
     private final Object src;
-    private final T oldValue;
-    private final T value;
+    private final T      oldValue;
+    private final T      value;
 
 
     // ******************** Constructors **************************************

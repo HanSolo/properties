@@ -26,10 +26,13 @@ public class ShortProperty extends ReadOnlyShortProperty {
 
     // ******************** Constructors **************************************
     public ShortProperty() {
-        super(null, null, (short) 0);
+        this(null, null, (short) 0);
     }
     public ShortProperty(final short value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public ShortProperty(final String name, final short value) {
+        this(null, name, value);
     }
     public ShortProperty(final Object bean, final String name, final short value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class ShortProperty extends ReadOnlyShortProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final ShortProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

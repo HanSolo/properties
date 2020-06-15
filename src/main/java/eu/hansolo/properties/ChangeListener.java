@@ -17,10 +17,7 @@
 package eu.hansolo.properties;
 
 
-/**
- * Created by hansolo on 24.10.17.
- */
 @FunctionalInterface
-public interface ChangeEventListener<T extends ChangeEvent> {
-    void onChangeEvent(T event);
+public interface ChangeListener<T extends ChangeEvent> {
+    void onEvent(T event);
 }

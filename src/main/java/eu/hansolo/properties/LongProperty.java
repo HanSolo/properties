@@ -26,10 +26,13 @@ public class LongProperty extends ReadOnlyLongProperty {
 
     // ******************** Constructors **************************************
     public LongProperty() {
-        super(null, null, 0l);
+        this(null, null, 0l);
     }
     public LongProperty(final long value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public LongProperty(final String name, final long value) {
+        this(null, name, value);
     }
     public LongProperty(final Object bean, final String name, final long value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class LongProperty extends ReadOnlyLongProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final LongProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

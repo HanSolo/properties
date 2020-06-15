@@ -26,10 +26,13 @@ public class ByteProperty extends ReadOnlyByteProperty {
 
     // ******************** Constructors **************************************
     public ByteProperty() {
-        super(null, null, (byte) 0);
+        this(null, null, (byte) 0);
     }
     public ByteProperty(final byte value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public ByteProperty(final String name, final byte value) {
+        this(null, name, value);
     }
     public ByteProperty(final Object bean, final String name, final byte value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class ByteProperty extends ReadOnlyByteProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final ByteProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

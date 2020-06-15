@@ -26,10 +26,13 @@ public class BooleanProperty extends ReadOnlyBooleanProperty {
 
     // ******************** Constructors **************************************
     public BooleanProperty() {
-        super(null, null, false);
+        this(null, null, false);
     }
     public BooleanProperty(final boolean value) {
-        super(null, null, Boolean.valueOf(value));
+        this(null, null, Boolean.valueOf(value));
+    }
+    public BooleanProperty(final String name, final boolean value) {
+        this(null, name, value);
     }
     public BooleanProperty(final Object bean, final String name, final boolean value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class BooleanProperty extends ReadOnlyBooleanProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final BooleanProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

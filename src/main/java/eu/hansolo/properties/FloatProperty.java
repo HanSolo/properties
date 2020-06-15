@@ -26,10 +26,13 @@ public class FloatProperty extends ReadOnlyFloatProperty {
 
     // ******************** Constructors **************************************
     public FloatProperty() {
-        super(null, null, 0f);
+        this(null, null, 0f);
     }
     public FloatProperty(final float value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public FloatProperty(final String name, final float value) {
+        this(null, name, value);
     }
     public FloatProperty(final Object bean, final String name, final float value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class FloatProperty extends ReadOnlyFloatProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final FloatProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

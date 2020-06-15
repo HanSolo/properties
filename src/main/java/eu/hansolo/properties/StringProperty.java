@@ -26,10 +26,13 @@ public class StringProperty extends ReadOnlyStringProperty {
 
     // ******************** Constructors **************************************
     public StringProperty() {
-        super(null, null, "");
+        this(null, null, "");
     }
     public StringProperty(final String value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public StringProperty(final String name, final String value) {
+        this(null, name, value);
     }
     public StringProperty(final Object bean, final String name, final String value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class StringProperty extends ReadOnlyStringProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final StringProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

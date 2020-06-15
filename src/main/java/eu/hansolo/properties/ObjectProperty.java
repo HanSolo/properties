@@ -26,10 +26,13 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
 
     // ******************** Constructors **************************************
     public ObjectProperty() {
-        super(null, null, null);
+        this(null, null, null);
     }
     public ObjectProperty(final T value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public ObjectProperty(final String name, final T value) {
+        this(null, name, value);
     }
     public ObjectProperty(final Object bean, final String name, final T value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final ObjectProperty<T> property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

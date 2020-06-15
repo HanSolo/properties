@@ -26,10 +26,13 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
 
     // ******************** Constructors **************************************
     public DoubleProperty() {
-        super(null, null, 0d);
+        this(null, null, 0d);
     }
     public DoubleProperty(final double value) {
-        super(null, null, value);
+        this(null, null, value);
+    }
+    public DoubleProperty(final String name, final double value) {
+        this(null, name, value);
     }
     public DoubleProperty(final Object bean, final String name, final double value) {
         super(bean, name, value);
@@ -65,13 +68,15 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
         propertyToUpdate = null;
         this.bound       = true;
     }
+    protected boolean isBound() { return this.bound; }
+
     protected void bindBidirectional(final DoubleProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBound() { return this.bound | this.bidirectional; }
+    protected boolean isBoundBidirectional() { return this.bidirectional; }
 
     protected void unbind() {
         if (null != this.propertyToUpdate) {

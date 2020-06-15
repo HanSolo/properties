@@ -20,10 +20,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public abstract class ReadOnlyProperty<T extends Object> {
-    protected CopyOnWriteArrayList<ChangeEventListener> listenerList;
-    protected Object                                    bean;
-    protected String                                    name;
-    protected T                                         value;
+    protected CopyOnWriteArrayList<ChangeListener> changeListeners;
+    protected Object                               bean;
+    protected String                               name;
+    protected T                                    value;
 
 
     // ******************** Constructors **************************************
@@ -55,22 +55,21 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
 
     // ******************** Event Handling ************************************
-    public void setOnPropertyChanged(final ChangeEventListener listener) { addListener(listener); }
-    public void addListener(final ChangeEventListener listener) {
-        if (null == listenerList) { listenerList = new CopyOnWriteArrayList<>(); }
-        if (!listenerList.contains(listener)) listenerList.add(listener);
+    public void addListener(final ChangeListener listener) {
+        if (null == changeListeners) { changeListeners = new CopyOnWriteArrayList<>(); }
+        if (!changeListeners.contains(listener)) changeListeners.add(listener);
     }
-    public void removeListener(final ChangeEventListener listener) {
-        if (null == listenerList) { return; }
-        if (listenerList.contains(listener)) listenerList.remove(listener);
+    public void removeListener(final ChangeListener listener) {
+        if (null == changeListeners) { return; }
+        if (changeListeners.contains(listener)) changeListeners.remove(listener);
     }
     public void removeAllListeners() {
-        if (null == listenerList) { return; }
-        listenerList.clear();
+        if (null == changeListeners) { return; }
+        changeListeners.clear();
     }
 
     public void fireEvent(final ChangeEvent event) {
-        if (null == listenerList) { listenerList = new CopyOnWriteArrayList<>(); }
-        listenerList.forEach(listener -> listener.onChangeEvent(event));
+        if (null == changeListeners) { return; }
+        changeListeners.forEach(listener -> listener.onEvent(event));
     }
 }
