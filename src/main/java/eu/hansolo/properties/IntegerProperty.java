@@ -19,6 +19,7 @@ package eu.hansolo.properties;
 
 public class IntegerProperty extends ReadOnlyIntegerProperty {
     protected IntegerProperty propertyToUpdate;
+    protected IntegerProperty propertyBoundTo;
     protected boolean         bound;
     protected boolean         bidirectional;
 
@@ -32,6 +33,10 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
     }
     public IntegerProperty(final Object bean, final String name, final int value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.propertyBoundTo  = null;
+        this.bound            = false;
+        this.bidirectional    = false;
     }
 
 
@@ -43,7 +48,7 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
     public void set(final int value) { setValue(value); }
     protected void setValue(final Integer value, final IntegerProperty property) {
         willChange(this.value, value);
-        final int oldValue = this.value;
+        final Integer oldValue = this.value;
         this.value = value;
         if (null == property && null != this.propertyToUpdate) {
             this.propertyToUpdate.setValue(value, this);
@@ -54,24 +59,32 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
     }
 
     protected void bind(final IntegerProperty property) {
-        this.value = property.getValue();
-        property.setPropertyToUpdate(this);
+        this.propertyBoundTo = property;
+        this.value           = this.propertyBoundTo.getValue();
+        propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
-        bound            = true;
-        bidirectional    = false;
+        this.bound       = true;
     }
     protected void bindBidirectional(final IntegerProperty property) {
-        setPropertyToUpdate(property);
-        property.setPropertyToUpdate(this);
-        this.bound         = true;
-        this.bidirectional = true;
+        setPropertyToUpdate(property, true);
+        property.setPropertyToUpdate(this, true);
+        this.propertyBoundTo = property;
+        this.bound           = true;
     }
-    protected boolean isBound() { return this.bound; }
+    protected boolean isBound() { return this.bound | this.bidirectional; }
 
     protected void unbind() {
-        this.propertyToUpdate = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        if (null != this.propertyToUpdate) {
+            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unbind();
+            this.propertyToUpdate = null;
+        }
+        if (null != this.propertyBoundTo) {
+            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo = null;
+        }
+        this.bound         = false;
+        this.bidirectional = false;
     }
 
     protected void setPropertyToUpdate(final IntegerProperty property) {
@@ -79,8 +92,11 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
     }
     protected void setPropertyToUpdate(final IntegerProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
-        this.value            = property.getValue();
-        this.bound            = true;
-        this.bidirectional    = true;
+        if (null == property) {
+            this.bidirectional = false;
+        } else {
+            this.value = property.getValue();
+            this.bidirectional = bidirectional;
+        }
     }
 }

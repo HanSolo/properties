@@ -19,6 +19,7 @@ package eu.hansolo.properties;
 
 public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
     protected Property<T> propertyToUpdate;
+    protected Property<T> propertyBoundTo;
     protected boolean     bound;
     protected boolean     bidirectional;
 
@@ -35,6 +36,7 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
         this.name             = name;
         this.value            = value;
         this.propertyToUpdate = null;
+        this.propertyBoundTo  = null;
         this.bound            = false;
         this.bidirectional    = false;
     }
@@ -59,24 +61,32 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
     }
 
     protected void bind(final Property<T> property) {
-        this.value = property.getValue();
-        property.setPropertyToUpdate(this);
+        this.propertyBoundTo = property;
+        this.value           = this.propertyBoundTo.getValue();
+        propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
-        bound            = true;
-        bidirectional    = false;
+        this.bound       = true;
     }
     protected void bindBidirectional(final Property<T> property) {
-        setPropertyToUpdate(property);
-        property.setPropertyToUpdate(this);
-        this.bound         = true;
-        this.bidirectional = true;
+        setPropertyToUpdate(property, true);
+        property.setPropertyToUpdate(this, true);
+        this.propertyBoundTo = property;
+        this.bound           = true;
     }
-    protected boolean isBound() { return this.bound; }
+    protected boolean isBound() { return this.bound | this.bidirectional; }
 
     protected void unbind() {
-        this.propertyToUpdate = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        if (null != this.propertyToUpdate) {
+            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unbind();
+            this.propertyToUpdate = null;
+        }
+        if (null != this.propertyBoundTo) {
+            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo = null;
+        }
+        this.bound         = false;
+        this.bidirectional = false;
     }
 
     protected void setPropertyToUpdate(final Property<T> property) {
@@ -84,8 +94,11 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
     }
     protected void setPropertyToUpdate(final Property<T> property, final boolean bidirectional) {
         this.propertyToUpdate = property;
-        this.value            = property.getValue();
-        this.bound            = true;
-        this.bidirectional    = true;
+        if (null == property) {
+            this.bidirectional = false;
+        } else {
+            this.value = property.getValue();
+            this.bidirectional = bidirectional;
+        }
     }
 }

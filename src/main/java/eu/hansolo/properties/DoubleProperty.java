@@ -19,6 +19,7 @@ package eu.hansolo.properties;
 
 public class DoubleProperty extends ReadOnlyDoubleProperty {
     protected DoubleProperty propertyToUpdate;
+    protected DoubleProperty propertyBoundTo;
     protected boolean        bound;
     protected boolean        bidirectional;
 
@@ -33,6 +34,7 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     public DoubleProperty(final Object bean, final String name, final double value) {
         super(bean, name, value);
         this.propertyToUpdate = null;
+        this.propertyBoundTo  = null;
         this.bound            = false;
         this.bidirectional    = false;
     }
@@ -46,7 +48,7 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     public void set(final double value) { setValue(value); }
     protected void setValue(final Double value, final DoubleProperty property) {
         willChange(this.value, value);
-        final double oldValue = this.value;
+        final Double oldValue = this.value;
         this.value = value;
         if (null == property && null != this.propertyToUpdate) {
             this.propertyToUpdate.setValue(value, this);
@@ -57,24 +59,32 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     }
 
     protected void bind(final DoubleProperty property) {
-        this.value = property.getValue();
-        property.setPropertyToUpdate(this);
+        this.propertyBoundTo = property;
+        this.value           = this.propertyBoundTo.getValue();
+        propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
-        bound            = true;
-        bidirectional    = false;
+        this.bound       = true;
     }
     protected void bindBidirectional(final DoubleProperty property) {
-        setPropertyToUpdate(property);
-        property.setPropertyToUpdate(this);
-        this.bound         = true;
-        this.bidirectional = true;
+        setPropertyToUpdate(property, true);
+        property.setPropertyToUpdate(this, true);
+        this.propertyBoundTo = property;
+        this.bound           = true;
     }
-    protected boolean isBound() { return this.bound; }
+    protected boolean isBound() { return this.bound | this.bidirectional; }
 
     protected void unbind() {
-        this.propertyToUpdate = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        if (null != this.propertyToUpdate) {
+            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unbind();
+            this.propertyToUpdate = null;
+        }
+        if (null != this.propertyBoundTo) {
+            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo = null;
+        }
+        this.bound         = false;
+        this.bidirectional = false;
     }
 
     protected void setPropertyToUpdate(final DoubleProperty property) {
@@ -82,8 +92,11 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     }
     protected void setPropertyToUpdate(final DoubleProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
-        this.value            = property.getValue();
-        this.bound            = true;
-        this.bidirectional    = true;
+        if (null == property) {
+            this.bidirectional = false;
+        } else {
+            this.value = property.getValue();
+            this.bidirectional = bidirectional;
+        }
     }
 }

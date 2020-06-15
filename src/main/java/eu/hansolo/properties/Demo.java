@@ -96,12 +96,20 @@ public class Demo {
         propertyB.set(5);
         System.out.println("\npropertyB = " + propertyB.get());
         System.out.println("propertyA = " + propertyA.get());
-        System.out.println("propertyA.set(20)");
+        System.out.println("\npropertyA.set(20)");
         try {
             propertyA.set(20);
         } catch (IllegalArgumentException e) {
             System.out.println("Error, a bound value cannot be set.");
         }
+        System.out.println("\npropertyA.unbind()");
+        propertyA.unbind();
+        System.out.println("\nProperty A: " + propertyA.get() + " is bound: " + propertyA.isBound());
+        System.out.println("Property B: " + propertyB.get() + " is bound: " + propertyB.isBound());
+        System.out.println("\npropertyB.set(15)");
+        propertyB.set(15);
+        System.out.println("\nProperty A: " + propertyA.get() + " is bound: " + propertyA.isBound());
+        System.out.println("Property B: " + propertyB.get() + " is bound: " + propertyB.isBound());
 
         // Bindings bidirectional
         System.out.println("\n\n---------- Bidirectional Binding ------------");
@@ -110,7 +118,7 @@ public class Demo {
 
         System.out.println("Property C: " + propertyC.get() + " is bound: " + propertyC.isBound());
         System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
-        System.out.println("\npropertyA.bindBidirectional(propertyB)");
+        System.out.println("\npropertyC.bindBidirectional(propertyD)");
         propertyC.bindBidirectional(propertyD);
         System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
         System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
@@ -122,6 +130,18 @@ public class Demo {
         propertyC.set(20);
         System.out.println("\npropertyC = " + propertyC.get());
         System.out.println("propertyD = " + propertyD.get());
+        System.out.println("\npropertyD.unbind()");
+        propertyD.unbind();
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
+        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\npropertyD.set(5)");
+        propertyD.set(5);
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
+        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
+        System.out.println("\npropertyC.set(10)");
+        propertyC.set(10);
+        System.out.println("\nProperty C: " + propertyC.get() + " is bound: " + propertyC.isBound());
+        System.out.println("Property D: " + propertyD.get() + " is bound: " + propertyD.isBound());
     }
 
     public static void main(String[] args) {

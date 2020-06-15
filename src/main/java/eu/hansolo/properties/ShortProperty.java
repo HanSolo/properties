@@ -19,6 +19,7 @@ package eu.hansolo.properties;
 
 public class ShortProperty extends ReadOnlyShortProperty {
     protected ShortProperty propertyToUpdate;
+    protected ShortProperty propertyBoundTo;
     protected boolean       bound;
     protected boolean       bidirectional;
 
@@ -32,6 +33,10 @@ public class ShortProperty extends ReadOnlyShortProperty {
     }
     public ShortProperty(final Object bean, final String name, final short value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.propertyBoundTo  = null;
+        this.bound            = false;
+        this.bidirectional    = false;
     }
 
 
@@ -41,9 +46,9 @@ public class ShortProperty extends ReadOnlyShortProperty {
         setValue(value, null);
     }
     public void set(final short value) { setValue(value); }
-    protected void setValue(final Short value, final ShortProperty property) {
+    protected void setValue(final short value, final ShortProperty property) {
         willChange(this.value, value);
-        final short oldValue = this.value;
+        final Short oldValue = this.value;
         this.value = value;
         if (null == property && null != this.propertyToUpdate) {
             this.propertyToUpdate.setValue(value, this);
@@ -54,24 +59,32 @@ public class ShortProperty extends ReadOnlyShortProperty {
     }
 
     protected void bind(final ShortProperty property) {
-        this.value = property.getValue();
-        property.setPropertyToUpdate(this);
+        this.propertyBoundTo = property;
+        this.value           = this.propertyBoundTo.getValue();
+        propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
-        bound            = true;
-        bidirectional    = false;
+        this.bound       = true;
     }
     protected void bindBidirectional(final ShortProperty property) {
-        setPropertyToUpdate(property);
-        property.setPropertyToUpdate(this);
-        this.bound         = true;
-        this.bidirectional = true;
+        setPropertyToUpdate(property, true);
+        property.setPropertyToUpdate(this, true);
+        this.propertyBoundTo = property;
+        this.bound           = true;
     }
-    protected boolean isBound() { return this.bound; }
+    protected boolean isBound() { return this.bound | this.bidirectional; }
 
     protected void unbind() {
-        this.propertyToUpdate = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        if (null != this.propertyToUpdate) {
+            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unbind();
+            this.propertyToUpdate = null;
+        }
+        if (null != this.propertyBoundTo) {
+            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo = null;
+        }
+        this.bound         = false;
+        this.bidirectional = false;
     }
 
     protected void setPropertyToUpdate(final ShortProperty property) {
@@ -79,8 +92,11 @@ public class ShortProperty extends ReadOnlyShortProperty {
     }
     protected void setPropertyToUpdate(final ShortProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
-        this.value            = property.getValue();
-        this.bound            = true;
-        this.bidirectional    = true;
+        if (null == property) {
+            this.bidirectional = false;
+        } else {
+            this.value = property.getValue();
+            this.bidirectional = bidirectional;
+        }
     }
 }
