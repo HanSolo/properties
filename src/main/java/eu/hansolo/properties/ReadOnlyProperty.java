@@ -55,6 +55,7 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
 
     // ******************** Event Handling ************************************
+    public void setOnChange(final ChangeListener listener) { addListener(listener); }
     public void addListener(final ChangeListener listener) {
         if (null == changeListeners) { changeListeners = new CopyOnWriteArrayList<>(); }
         if (!changeListeners.contains(listener)) changeListeners.add(listener);
