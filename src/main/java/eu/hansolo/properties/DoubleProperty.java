@@ -53,6 +53,7 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final DoubleProperty property) {

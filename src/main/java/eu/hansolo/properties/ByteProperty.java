@@ -50,6 +50,7 @@ public class ByteProperty extends ReadOnlyByteProperty {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final ByteProperty property) {

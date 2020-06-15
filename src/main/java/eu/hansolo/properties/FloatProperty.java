@@ -50,6 +50,7 @@ public class FloatProperty extends ReadOnlyFloatProperty {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final FloatProperty property) {

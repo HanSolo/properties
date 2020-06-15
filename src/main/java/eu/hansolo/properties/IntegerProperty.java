@@ -50,6 +50,7 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final IntegerProperty property) {

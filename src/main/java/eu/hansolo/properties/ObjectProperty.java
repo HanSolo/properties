@@ -50,6 +50,7 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final ObjectProperty<T> property) {

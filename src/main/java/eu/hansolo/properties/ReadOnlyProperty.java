@@ -47,6 +47,8 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
     protected void didChange(final T oldValue, final T newValue) {}
 
+    protected void invalidated() {}
+
     public Object getBean() { return bean; }
 
     public String getName() { return name; }

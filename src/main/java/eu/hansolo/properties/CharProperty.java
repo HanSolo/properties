@@ -50,6 +50,7 @@ public class CharProperty extends ReadOnlyCharProperty {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final CharProperty property) {

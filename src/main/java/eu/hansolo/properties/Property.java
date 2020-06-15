@@ -55,6 +55,7 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
         }
         fireEvent(new ChangeEvent<>(this, oldValue, this.value));
         didChange(oldValue, this.value);
+        invalidated();
     }
 
     protected void bind(final Property<T> property) {
