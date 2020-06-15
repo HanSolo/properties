@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-// TilesFX main build file
+// Properties main build file
 plugins {
     id 'idea'
     id 'java-library'
@@ -26,7 +26,7 @@ wrapper {
     gradleVersion = '6.4'
 }
 
-description = 'Properties inspired by the JavaFX properties but without bindings'
+description = 'Properties inspired by the JavaFX properties'
 
 Date buildTimeAndDate = new Date()
 ext {
