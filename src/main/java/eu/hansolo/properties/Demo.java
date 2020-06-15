@@ -28,6 +28,8 @@ public class Demo {
 
     public Demo() {
         pojo = new PoJo();
+        pojo.valueProperty().addListener(evt -> System.out.println("Value changed from " + evt.getOldValue() + " to " + evt.getValue()));
+
 
         ChangeListener doubleChangeListener = e -> System.out.println(e.getOldValue() + " -> " + e.getValue());
 
@@ -73,6 +75,10 @@ public class Demo {
 
         // Set values
         pojo.setDoubleValue(7);
+
+        pojo.setValue(5);
+
+        pojo.valueProperty().set(8);
 
         doubleProperty.set(20);
 
@@ -153,17 +159,43 @@ public class Demo {
 
 
     public class PoJo {
+        private double          _value;
+        private DoubleProperty  value;
         private DoubleProperty  doubleValue;
         private BooleanProperty booleanValue;
 
+
         // ******************** Constructors **************************************
         public PoJo() {
+            _value       = 0;
             doubleValue  = new DoubleProperty(3);
             booleanValue = new BooleanProperty(true);
         }
 
 
         // ******************** Methods *******************************************
+        public double getValue() { return null == value ? _value : value.get(); }
+        public void setValue(final double value) {
+            if (null == this.value) {
+                _value = value;
+            } else {
+                this.value.set(value);
+            }
+        }
+        public DoubleProperty valueProperty() {
+            if (null == value) {
+                value = new DoubleProperty(_value) {
+                    @Override protected void willChange(final Double oldValue, final Double newValue) {
+                        System.out.println("\nValue will change from " + oldValue + " to " + newValue + "\n");
+                    }
+                    @Override protected void didChange(final Double oldValue, final Double newValue) {
+                        System.out.println("\nValue changed from " + oldValue + " to " + newValue + "\n");
+                    }
+                };
+            }
+            return value;
+        }
+
         public double getDoubleValue() { return doubleValue.get(); }
         public void setDoubleValue(final double value) { doubleValue.set(value); }
         public DoubleProperty doubleValueProperty() { return doubleValue; }
