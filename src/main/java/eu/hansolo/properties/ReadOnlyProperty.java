@@ -16,6 +16,7 @@
 
 package eu.hansolo.properties;
 
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -50,7 +51,7 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
     public final T getInitialValue() { return initialValue; }
 
-    public final boolean isSet() { return getValue().equals(getInitialValue()); }
+    public final boolean isSet() { return Objects.equals(getValue(), getInitialValue()); }
 
     protected void willChange(final T oldValue, final T newValue) {}
 
