@@ -21,6 +21,7 @@ plugins {
 apply plugin: 'biz.aQute.bnd.builder'
 
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 wrapper {
     gradleVersion = '6.4'

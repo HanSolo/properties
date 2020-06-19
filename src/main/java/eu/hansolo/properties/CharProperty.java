@@ -61,6 +61,10 @@ public class CharProperty extends ReadOnlyCharProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Character initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final CharProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

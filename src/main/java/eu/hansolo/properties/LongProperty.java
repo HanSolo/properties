@@ -61,6 +61,10 @@ public class LongProperty extends ReadOnlyLongProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Long initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final LongProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

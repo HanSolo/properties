@@ -61,6 +61,10 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final T initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final ObjectProperty<T> property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

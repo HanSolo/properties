@@ -89,6 +89,7 @@ public class Demo {
         objectProperty.set("Bla");
 
 
+
         // Bindings unidirectional
         System.out.println("\n\n---------- Unidirectional Binding ------------");
         DoubleProperty propertyA = new DoubleProperty(5);

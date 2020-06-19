@@ -61,6 +61,10 @@ public class ShortProperty extends ReadOnlyShortProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Short initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final ShortProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

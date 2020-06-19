@@ -61,6 +61,10 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Double initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final DoubleProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

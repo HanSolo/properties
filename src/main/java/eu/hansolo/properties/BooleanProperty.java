@@ -61,6 +61,10 @@ public class BooleanProperty extends ReadOnlyBooleanProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Boolean initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final BooleanProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

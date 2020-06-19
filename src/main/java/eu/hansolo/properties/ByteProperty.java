@@ -61,6 +61,10 @@ public class ByteProperty extends ReadOnlyByteProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Byte initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final ByteProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

@@ -63,6 +63,10 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final T initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final Property<T> property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

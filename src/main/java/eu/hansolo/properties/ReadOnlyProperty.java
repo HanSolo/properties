@@ -23,25 +23,34 @@ public abstract class ReadOnlyProperty<T extends Object> {
     protected CopyOnWriteArrayList<ChangeListener> changeListeners;
     protected Object                               bean;
     protected String                               name;
+    protected T                                    initialValue;
     protected T                                    value;
 
 
     // ******************** Constructors **************************************
     public ReadOnlyProperty() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
     public ReadOnlyProperty(final T value) {
-        this(null, null, value);
+        this(null, null, value, value);
     }
     public ReadOnlyProperty(final Object bean, final String name, final T value) {
-        this.bean  = bean;
-        this.name  = name;
-        this.value = value;
+        this(bean, name, value, value);
+    }
+    public ReadOnlyProperty(final Object bean, final String name, final T value, final T initialValue) {
+        this.bean         = bean;
+        this.name         = name;
+        this.value        = value;
+        this.initialValue = initialValue;
     }
 
 
     // ******************** Methods *******************************************
     public final T getValue() { return value; }
+
+    public final T getInitialValue() { return initialValue; }
+
+    public final boolean isSet() { return getValue().equals(getInitialValue()); }
 
     protected void willChange(final T oldValue, final T newValue) {}
 

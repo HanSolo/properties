@@ -61,6 +61,10 @@ public class FloatProperty extends ReadOnlyFloatProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Float initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final FloatProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

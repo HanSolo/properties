@@ -61,6 +61,10 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final Integer initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final IntegerProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();

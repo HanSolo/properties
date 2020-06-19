@@ -61,6 +61,10 @@ public class StringProperty extends ReadOnlyStringProperty {
         invalidated();
     }
 
+    public void unset() { setValue(getInitialValue()); }
+
+    public void setInitialValue(final String initialValue) { this.initialValue = initialValue; }
+
     protected void bind(final StringProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
