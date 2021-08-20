@@ -1,50 +1,42 @@
 import java.text.SimpleDateFormat
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.3.1'
-    }
-}
-
-// Properties main build file
 plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
-    id 'net.nemerosa.versioning' version '2.10.0'
-    id 'com.jfrog.bintray' version '1.8.5'
+    id 'signing'
+    id 'com.google.osdetector'           version '1.7.0'
+    id 'org.javamodularity.moduleplugin' version '1.8.7'
+    id 'org.beryx.jlink'                 version '2.24.1'
+    id 'net.nemerosa.versioning'         version '2.14.0'
+    id 'biz.aQute.bnd.builder'           version '5.3.0'
 }
 
 apply plugin: 'biz.aQute.bnd.builder'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
-wrapper {
-    gradleVersion = '6.4'
-}
-
-description = 'Properties inspired by the JavaFX properties'
+description = 'Properties offers properties one can bind to'
+mainClassName = "$moduleName/eu.hansolo.properties.Demo"
 
 Date buildTimeAndDate = new Date()
 ext {
     buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+    platform        = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
+    ciOssrhUsername = System.getenv('OSSRH_USERNAME')
+    ciOssrhPassword = System.getenv('OSSRH_PASSWORD')
+    ciGHUser        = System.getenv('GH_USER')
+    ciGHToken       = System.getenv('GH_TOKEN')
+    gpgkey          = System.getenv("GPG_PRIVATE_KEY")
+    gpgpassphrase   = System.getenv("PASSPHRASE")
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-}
-
-// Supress javadoc warnings
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
-        }
-    }
 }
 
 jar {
@@ -60,23 +52,12 @@ jar {
                 'Implementation-Title'  : project.name,
                 'Implementation-Version': project.version,
                 'Bundle-Name'           : project.name,
-                'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://www.eclipse.org/legal/eplfaq.php',
+                'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://spdx.org/licenses/Apache-2.0.html',
                 'Bundle-Description'    : description,
                 'Bundle-SymbolicName'   : 'eu.hansolo.properties',
                 'Export-Package'        : 'eu.hansolo.properties'
         )
     }
-}
-
-repositories {
-    jcenter()
-    mavenCentral()
-}
-
-// start the demo from gradle
-task Demo(type: JavaExec) {
-    main = "eu.hansolo.properties.Demo"
-    classpath = sourceSets.main.runtimeClasspath
 }
 
 // create one jar for the javadoc
@@ -97,76 +78,75 @@ artifacts {
     archives sourcesJar
 }
 
-def pomConfig = {
-    name 'properties'
-    // Description won't be used when creating the pom file automatically.
-    // So I've added it manually in the pom.withXml{} section in the publishing task
-    url 'https://github.com/HanSolo/properties/wiki'
-    inceptionYear '2020'
-    licenses {
-        license([:]) {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-        }
+signing {
+    if (gpgkey && gpgpassphrase) {
+        useInMemoryPgpKeys(gpgkey, gpgpassphrase)
     }
-    scm {
-        url 'scm:git@github.com:HanSolo/properties.git'
-        connection 'scm:git@github.com:HanSolo/properties.git'
-        developerConnection 'scm:git@github.com:HanSolo/properties.git'
-    }
-    developers {
-        developer {
-            id 'HanSolo'
-            name 'Gerrit Grunwald'
-        }
-    }
+
+    sign configurations.archives
+    sign publishing.publications
 }
 
 publishing {
     publications {
         mavenCustom(MavenPublication) {
+            group = 'eu.hansolo'
+            artifactId = 'properties'
+            version = "${version}"
+
             from components.java
             artifact sourcesJar
             artifact javadocJar
 
             pom.withXml {
-                asNode().children().last() + pomConfig
-                asNode().appendNode('description', description)
+                asNode().dependencies.'*'.findAll {
+                    it.groupId.text() == 'org.openjfx'
+                }.each {
+                    it.remove(it.classifier)
+                }
+            }
+
+            pom {
+                name = 'properties'
+                description = 'A Java library that offers properties one can bind to'
+                url = "https://github.com/HanSolo/properties/wiki"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "HanSolo"
+                        name = "Gerrit Grunwald"
+                        email = "han.solo@mac.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://HanSolo/properties"
+                    developerConnection = "scm:git:https://HanSolo/properties"
+                    url = "https://github.com/HanSolo/properties"
+                }
             }
         }
     }
-}
 
-if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
-if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
-if (!project.hasProperty('sonatypeUsername')) ext.sonatypeUsername = ''
-if (!project.hasProperty('sonatypePassword')) ext.sonatypePassword = ''
-
-
-bintray {
-    user = project.bintrayUsername
-    key  = project.bintrayApiKey
-    publications = ['mavenCustom']
-    pkg {
-        repo                  = 'Properties'
-        userOrg               = 'hansolo'
-        name                  = project.name
-        desc                  = description
-        licenses              = ['Apache-2.0']
-        labels                = ['java']
-        websiteUrl            = 'https://github.com/HanSolo/properties/wiki'
-        issueTrackerUrl       = 'https://github.com/HanSolo/properties/issues'
-        vcsUrl                = 'git@github.com:HanSolo/properties.git'
-        publicDownloadNumbers = true
-        version {
-            name   = project.version
-            vcsTag = project.version
-            mavenCentralSync {
-                sync = true
-                user = project.sonatypeUsername
-                password = project.sonatypePassword
-                close = '1'
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            credentials {
+                username = null == ciOssrhUsername ? ossrhUsername : ciOssrhUsername
+                password = null == ciOssrhPassword ? ossrhPassword : ciOssrhPassword
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/HanSolo/properties"
+            credentials {
+                username = null == ciGHUser  ? ghUser  : ciGHUser
+                password = null == ciGHToken ? ghToken : ciGHToken
             }
         }
     }
