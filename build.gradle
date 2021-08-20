@@ -16,7 +16,7 @@ apply plugin: 'biz.aQute.bnd.builder'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-description = 'Properties offers properties one can bind to'
+description = 'Properties offers properties'
 mainClassName = "$moduleName/eu.hansolo.properties.Demo"
 
 Date buildTimeAndDate = new Date()
@@ -108,7 +108,7 @@ publishing {
 
             pom {
                 name = 'properties'
-                description = 'A Java library that offers properties one can bind to'
+                description = 'A Java library that offers properties'
                 url = "https://github.com/HanSolo/properties/wiki"
                 licenses {
                     license {
