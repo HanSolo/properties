@@ -1,4 +1,5 @@
-## Properties
+## Properties <img align="right" src="https://github.com/foojay2020/badges/raw/main/works_with_openjdk/Works-with-OpenJDK.png" width="100">
+<br>
 A Java library containing JavaFX like properties but 
 without the dependencies on the JavaFX packages.
 
