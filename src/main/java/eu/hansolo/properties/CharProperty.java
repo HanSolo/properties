@@ -65,24 +65,24 @@ public class CharProperty extends ReadOnlyCharProperty {
 
     public void setInitialValue(final Character initialValue) { this.initialValue = initialValue; }
 
-    protected void bind(final CharProperty property) {
+    public void bind(final CharProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
         this.bound       = true;
     }
-    protected boolean isBound() { return this.bound; }
+    public boolean isBound() { return this.bound; }
 
-    protected void bindBidirectional(final CharProperty property) {
+    public void bindBidirectional(final CharProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBoundBidirectional() { return this.bidirectional; }
+    public boolean isBoundBidirectional() { return this.bidirectional; }
 
-    protected void unbind() {
+    public void unbind() {
         if (null != this.propertyToUpdate) {
             this.propertyToUpdate.setPropertyToUpdate(null);
             this.propertyToUpdate.unbind();

@@ -43,7 +43,7 @@ public class Demo {
             }
         };
 
-        doubleProperty.setOnChange(doubleChangeListener);
+        doubleProperty.addOnChange(doubleChangeListener);
 
         doubleProperty.removeListener(doubleChangeListener);
 
@@ -66,7 +66,7 @@ public class Demo {
 
 
         // Register listeners
-        pojo.doubleValueProperty().setOnChange(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        pojo.doubleValueProperty().addOnChange(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
 
         doubleProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
 

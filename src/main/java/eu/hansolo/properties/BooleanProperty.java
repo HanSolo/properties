@@ -65,24 +65,24 @@ public class BooleanProperty extends ReadOnlyBooleanProperty {
 
     public void setInitialValue(final Boolean initialValue) { this.initialValue = initialValue; }
 
-    protected void bind(final BooleanProperty property) {
+    public void bind(final BooleanProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
         propertyToUpdate = null;
         this.bound       = true;
     }
-    protected boolean isBound() { return this.bound; }
+    public boolean isBound() { return this.bound; }
 
-    protected void bindBidirectional(final BooleanProperty property) {
+    public void bindBidirectional(final BooleanProperty property) {
         setPropertyToUpdate(property, true);
         property.setPropertyToUpdate(this, true);
         this.propertyBoundTo = property;
         this.bound           = true;
     }
-    protected boolean isBoundBidirectional() { return this.bidirectional; }
+    public boolean isBoundBidirectional() { return this.bidirectional; }
 
-    protected void unbind() {
+    public void unbind() {
         if (null != this.propertyToUpdate) {
             this.propertyToUpdate.setPropertyToUpdate(null);
             this.propertyToUpdate.unbind();

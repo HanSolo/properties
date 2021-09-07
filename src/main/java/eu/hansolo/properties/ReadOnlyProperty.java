@@ -65,14 +65,18 @@ public abstract class ReadOnlyProperty<T extends Object> {
 
 
     // ******************** Event Handling ************************************
-    public void setOnChange(final ChangeListener listener) { addListener(listener); }
+    public void addOnChange(final ChangeListener listener) {
+        addListener(listener);
+    }
     public void addListener(final ChangeListener listener) {
+        if (null == listener) { return; }
         if (null == changeListeners) { changeListeners = new CopyOnWriteArrayList<>(); }
-        if (!changeListeners.contains(listener)) changeListeners.add(listener);
+        if (changeListeners.contains(listener)) { return; }
+        changeListeners.add(listener);
     }
     public void removeListener(final ChangeListener listener) {
-        if (null == changeListeners) { return; }
-        if (changeListeners.contains(listener)) changeListeners.remove(listener);
+        if (null == changeListeners || null == listener) { return; }
+        if (changeListeners.contains(listener)) { changeListeners.remove(listener); }
     }
     public void removeAllListeners() {
         if (null == changeListeners) { return; }
@@ -80,7 +84,7 @@ public abstract class ReadOnlyProperty<T extends Object> {
     }
 
     public void fireEvent(final ChangeEvent event) {
-        if (null == changeListeners) { return; }
+        if (null == changeListeners || null == event) { return; }
         changeListeners.forEach(listener -> listener.onEvent(event));
     }
 }
