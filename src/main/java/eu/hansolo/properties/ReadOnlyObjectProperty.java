@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyObjectProperty<T> extends ReadOnlyProperty<T> {
+    protected ObjectProperty<T> propertyToUpdate;
+    protected boolean           bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyObjectProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyObjectProperty<T> extends ReadOnlyProperty<T> {
     }
     public ReadOnlyObjectProperty(final Object bean, final String name, final T value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public T get() { return value; }
+
+    protected void setPropertyToUpdate(final ObjectProperty<T> property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

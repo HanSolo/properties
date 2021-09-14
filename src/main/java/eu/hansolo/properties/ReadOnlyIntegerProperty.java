@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyIntegerProperty extends ReadOnlyProperty<Integer> {
+    protected IntegerProperty propertyToUpdate;
+    protected boolean         bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyIntegerProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyIntegerProperty extends ReadOnlyProperty<Integer> {
     }
     public ReadOnlyIntegerProperty(final Object bean, final String name, final int value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public int get() { return value; }
+
+    protected void setPropertyToUpdate(final IntegerProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

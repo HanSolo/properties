@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyLongProperty extends ReadOnlyProperty<Long> {
+    protected LongProperty propertyToUpdate;
+    protected boolean      bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyLongProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyLongProperty extends ReadOnlyProperty<Long> {
     }
     public ReadOnlyLongProperty(final Object bean, final String name, final long value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public long get() { return value; }
+
+    protected void setPropertyToUpdate(final LongProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

@@ -120,6 +120,18 @@ public class Demo {
         System.out.println("\nProperty A: " + propertyA.get() + " is bound: " + propertyA.isBound());
         System.out.println("Property B: " + propertyB.get() + " is bound: " + propertyB.isBound());
 
+        System.out.println("\nReadOnlyDoubleProperty: " + readOnlyDoubleProperty.getValue());
+        System.out.println("DoubleProperty        : " + doubleProperty.getValue());
+        System.out.println("Bind DoubleProperty -> ReadOnlyDoubleProperty");
+        doubleProperty.bind(readOnlyDoubleProperty);
+        System.out.println("DoubleProperty        : " + doubleProperty.getValue());
+        System.out.println("Unbind DoubleProperty -> ReadOnlyDoubleProperty");
+        doubleProperty.unbind();
+        System.out.println("Set DoubleProperty -> 13");
+        doubleProperty.set(13);
+        System.out.println("DoubleProperty        : " + doubleProperty.getValue());
+
+
         // Bindings bidirectional
         System.out.println("\n\n---------- Bidirectional Binding ------------");
         DoubleProperty propertyC = new DoubleProperty(0);

@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyDoubleProperty extends ReadOnlyProperty<Double> {
+    protected DoubleProperty propertyToUpdate;
+    protected boolean        bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyDoubleProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyDoubleProperty extends ReadOnlyProperty<Double> {
     }
     public ReadOnlyDoubleProperty(final Object bean, final String name, final double value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public double get() { return value; }
+
+    protected void setPropertyToUpdate(final DoubleProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

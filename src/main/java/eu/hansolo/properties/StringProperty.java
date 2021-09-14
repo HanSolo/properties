@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class StringProperty extends ReadOnlyStringProperty {
-    protected StringProperty propertyToUpdate;
     protected StringProperty propertyBoundTo;
     protected boolean        bound;
-    protected boolean        bidirectional;
 
 
     // ******************** Constructors **************************************
@@ -36,10 +34,8 @@ public class StringProperty extends ReadOnlyStringProperty {
     }
     public StringProperty(final Object bean, final String name, final String value) {
         super(bean, name, value);
-        this.propertyToUpdate = null;
-        this.propertyBoundTo  = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        this.propertyBoundTo = null;
+        this.bound           = false;
     }
 
 
@@ -84,21 +80,18 @@ public class StringProperty extends ReadOnlyStringProperty {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final StringProperty property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final StringProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

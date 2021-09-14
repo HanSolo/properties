@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyByteProperty extends ReadOnlyProperty<Byte> {
+    protected ByteProperty propertyToUpdate;
+    protected boolean      bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyByteProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyByteProperty extends ReadOnlyProperty<Byte> {
     }
     public ReadOnlyByteProperty(final Object bean, final String name, final byte value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public byte get() { return value; }
+
+    protected void setPropertyToUpdate(final ByteProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

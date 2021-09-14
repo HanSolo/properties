@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class DoubleProperty extends ReadOnlyDoubleProperty {
-    protected DoubleProperty propertyToUpdate;
-    protected DoubleProperty propertyBoundTo;
-    protected boolean        bound;
-    protected boolean        bidirectional;
+    protected ReadOnlyDoubleProperty propertyBoundTo;
+    protected boolean                bound;
 
 
     // ******************** Constructors **************************************
@@ -36,10 +34,8 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
     }
     public DoubleProperty(final Object bean, final String name, final double value) {
         super(bean, name, value);
-        this.propertyToUpdate = null;
-        this.propertyBoundTo  = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        this.propertyBoundTo = null;
+        this.bound           = false;
     }
 
 
@@ -65,7 +61,7 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
 
     public void setInitialValue(final Double initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final DoubleProperty property) {
+    public void bind(final ReadOnlyDoubleProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -84,21 +80,18 @@ public class DoubleProperty extends ReadOnlyDoubleProperty {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final DoubleProperty property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final DoubleProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

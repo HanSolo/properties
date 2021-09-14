@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
-    protected Property<T> propertyToUpdate;
-    protected Property<T> propertyBoundTo;
-    protected boolean     bound;
-    protected boolean     bidirectional;
+    protected ReadOnlyProperty<T> propertyBoundTo;
+    protected boolean             bound;
 
 
     // ******************** Constructors **************************************
@@ -35,13 +33,9 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
         this(null, name, value);
     }
     public Property(final Object bean, final String name, final T value) {
-        this.bean             = bean;
-        this.name             = name;
-        this.value            = value;
-        this.propertyToUpdate = null;
+        super(bean, name, value);
         this.propertyBoundTo  = null;
         this.bound            = false;
-        this.bidirectional    = false;
     }
 
 
@@ -67,7 +61,7 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
 
     public void setInitialValue(final T initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final Property<T> property) {
+    public void bind(final ReadOnlyProperty<T> property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -98,9 +92,6 @@ public abstract class Property<T extends Object> extends ReadOnlyProperty<T> {
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final Property<T> property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final Property<T> property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

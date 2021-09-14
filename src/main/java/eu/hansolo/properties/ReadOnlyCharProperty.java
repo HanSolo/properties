@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyCharProperty extends ReadOnlyProperty<Character> {
+    protected CharProperty propertyToUpdate;
+    protected boolean      bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyCharProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyCharProperty extends ReadOnlyProperty<Character> {
     }
     public ReadOnlyCharProperty(final Object bean, final String name, final char value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public char get() { return value; }
+
+    protected void setPropertyToUpdate(final CharProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

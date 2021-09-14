@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
-    protected ObjectProperty<T> propertyToUpdate;
-    protected ObjectProperty<T> propertyBoundTo;
-    protected boolean           bound;
-    protected boolean           bidirectional;
+    protected ReadOnlyObjectProperty<T> propertyBoundTo;
+    protected boolean                   bound;
 
 
     // ******************** Constructors **************************************
@@ -36,10 +34,8 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
     }
     public ObjectProperty(final Object bean, final String name, final T value) {
         super(bean, name, value);
-        this.propertyToUpdate = null;
-        this.propertyBoundTo  = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        this.propertyBoundTo = null;
+        this.bound           = false;
     }
 
 
@@ -65,7 +61,7 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
 
     public void setInitialValue(final T initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final ObjectProperty<T> property) {
+    public void bind(final ReadOnlyObjectProperty<T> property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -84,21 +80,18 @@ public class ObjectProperty<T> extends ReadOnlyObjectProperty<T> {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final ObjectProperty<T> property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final ObjectProperty<T> property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

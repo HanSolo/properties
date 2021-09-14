@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class IntegerProperty extends ReadOnlyIntegerProperty {
-    protected IntegerProperty propertyToUpdate;
-    protected IntegerProperty propertyBoundTo;
-    protected boolean         bound;
-    protected boolean         bidirectional;
+    protected ReadOnlyIntegerProperty propertyBoundTo;
+    protected boolean                 bound;
 
 
     // ******************** Constructors **************************************
@@ -65,7 +63,7 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
 
     public void setInitialValue(final Integer initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final IntegerProperty property) {
+    public void bind(final ReadOnlyIntegerProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -84,21 +82,18 @@ public class IntegerProperty extends ReadOnlyIntegerProperty {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final IntegerProperty property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final IntegerProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

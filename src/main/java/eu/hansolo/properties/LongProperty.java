@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class LongProperty extends ReadOnlyLongProperty {
-    protected LongProperty propertyToUpdate;
-    protected LongProperty propertyBoundTo;
-    protected boolean      bound;
-    protected boolean      bidirectional;
+    protected ReadOnlyLongProperty propertyBoundTo;
+    protected boolean              bound;
 
 
     // ******************** Constructors **************************************
@@ -36,10 +34,8 @@ public class LongProperty extends ReadOnlyLongProperty {
     }
     public LongProperty(final Object bean, final String name, final long value) {
         super(bean, name, value);
-        this.propertyToUpdate = null;
-        this.propertyBoundTo  = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        this.propertyBoundTo = null;
+        this.bound           = false;
     }
 
 
@@ -65,7 +61,7 @@ public class LongProperty extends ReadOnlyLongProperty {
 
     public void setInitialValue(final Long initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final LongProperty property) {
+    public void bind(final ReadOnlyLongProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -84,21 +80,18 @@ public class LongProperty extends ReadOnlyLongProperty {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final LongProperty property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final LongProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

@@ -18,10 +18,8 @@ package eu.hansolo.properties;
 
 
 public class ByteProperty extends ReadOnlyByteProperty {
-    protected ByteProperty propertyToUpdate;
-    protected ByteProperty propertyBoundTo;
-    protected boolean      bound;
-    protected boolean      bidirectional;
+    protected ReadOnlyByteProperty propertyBoundTo;
+    protected boolean              bound;
 
 
     // ******************** Constructors **************************************
@@ -36,10 +34,8 @@ public class ByteProperty extends ReadOnlyByteProperty {
     }
     public ByteProperty(final Object bean, final String name, final byte value) {
         super(bean, name, value);
-        this.propertyToUpdate = null;
-        this.propertyBoundTo  = null;
-        this.bound            = false;
-        this.bidirectional    = false;
+        this.propertyBoundTo = null;
+        this.bound           = false;
     }
 
 
@@ -65,7 +61,7 @@ public class ByteProperty extends ReadOnlyByteProperty {
 
     public void setInitialValue(final Byte initialValue) { this.initialValue = initialValue; }
 
-    public void bind(final ByteProperty property) {
+    public void bind(final ReadOnlyByteProperty property) {
         this.propertyBoundTo = property;
         this.value           = this.propertyBoundTo.getValue();
         propertyBoundTo.setPropertyToUpdate(this);
@@ -84,21 +80,18 @@ public class ByteProperty extends ReadOnlyByteProperty {
 
     public void unbind() {
         if (null != this.propertyToUpdate) {
-            this.propertyToUpdate.setPropertyToUpdate(null);
+            this.propertyToUpdate.unsetPropertyToUpdate();
             this.propertyToUpdate.unbind();
             this.propertyToUpdate = null;
         }
         if (null != this.propertyBoundTo) {
-            this.propertyBoundTo.setPropertyToUpdate(null);
+            this.propertyBoundTo.unsetPropertyToUpdate();
             this.propertyBoundTo = null;
         }
         this.bound         = false;
         this.bidirectional = false;
     }
 
-    protected void setPropertyToUpdate(final ByteProperty property) {
-        setPropertyToUpdate(property, false);
-    }
     protected void setPropertyToUpdate(final ByteProperty property, final boolean bidirectional) {
         this.propertyToUpdate = property;
         if (null == property) {

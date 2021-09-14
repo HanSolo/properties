@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyShortProperty extends ReadOnlyProperty<Short> {
+    protected ShortProperty propertyToUpdate;
+    protected boolean       bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyShortProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyShortProperty extends ReadOnlyProperty<Short> {
     }
     public ReadOnlyShortProperty(final Object bean, final String name, final short value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public short get() { return value; }
+
+    protected void setPropertyToUpdate(final ShortProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

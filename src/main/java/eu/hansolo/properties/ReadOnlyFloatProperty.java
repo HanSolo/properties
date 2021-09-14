@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyFloatProperty extends ReadOnlyProperty<Float> {
+    protected FloatProperty propertyToUpdate;
+    protected boolean       bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyFloatProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyFloatProperty extends ReadOnlyProperty<Float> {
     }
     public ReadOnlyFloatProperty(final Object bean, final String name, final float value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public float get() { return value; }
+
+    protected void setPropertyToUpdate(final FloatProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }

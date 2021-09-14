@@ -26,6 +26,8 @@ public abstract class ReadOnlyProperty<T extends Object> {
     protected String                               name;
     protected T                                    initialValue;
     protected T                                    value;
+    protected Property<T>                          propertyToUpdate;
+    protected boolean                              bidirectional;
 
 
     // ******************** Constructors **************************************
@@ -39,10 +41,12 @@ public abstract class ReadOnlyProperty<T extends Object> {
         this(bean, name, value, value);
     }
     public ReadOnlyProperty(final Object bean, final String name, final T value, final T initialValue) {
-        this.bean         = bean;
-        this.name         = name;
-        this.value        = value;
-        this.initialValue = initialValue;
+        this.bean             = bean;
+        this.name             = name;
+        this.value            = value;
+        this.initialValue     = initialValue;
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
@@ -62,6 +66,15 @@ public abstract class ReadOnlyProperty<T extends Object> {
     public Object getBean() { return bean; }
 
     public String getName() { return name; }
+
+    protected void setPropertyToUpdate(final Property<T> property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 
 
     // ******************** Event Handling ************************************

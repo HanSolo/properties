@@ -18,6 +18,9 @@ package eu.hansolo.properties;
 
 
 public class ReadOnlyBooleanProperty extends ReadOnlyProperty<Boolean> {
+    protected BooleanProperty propertyToUpdate;
+    protected boolean         bidirectional;
+
 
     // ******************** Constructors **************************************
     public ReadOnlyBooleanProperty() {
@@ -28,9 +31,20 @@ public class ReadOnlyBooleanProperty extends ReadOnlyProperty<Boolean> {
     }
     public ReadOnlyBooleanProperty(final Object bean, final String name, final boolean value) {
         super(bean, name, value);
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
     }
 
 
     // ******************** Methods *******************************************
     public boolean get() { return value; }
+
+    protected void setPropertyToUpdate(final BooleanProperty property) {
+        this.propertyToUpdate = property;
+        this.bidirectional    = false;
+    }
+    protected void unsetPropertyToUpdate() {
+        this.propertyToUpdate = null;
+        this.bidirectional    = false;
+    }
 }
