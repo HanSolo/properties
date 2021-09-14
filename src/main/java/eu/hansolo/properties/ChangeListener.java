@@ -18,6 +18,6 @@ package eu.hansolo.properties;
 
 
 @FunctionalInterface
-public interface ChangeListener<T extends ChangeEvent> {
-    void onEvent(T event);
+public interface ChangeListener<T extends Object> {
+    void onEvent(ChangeEvent<T> event);
 }

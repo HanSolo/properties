@@ -50,7 +50,7 @@ public class Demo {
         doubleProperty.removeAllListeners();
 
 
-        objectProperty = new ObjectProperty();
+        objectProperty = new ObjectProperty<>();
 
         integerProperty = new IntegerProperty(10) {
             @Override public void set(final int VALUE) { super.set(VALUE); }
@@ -66,11 +66,12 @@ public class Demo {
 
 
         // Register listeners
-        pojo.doubleValueProperty().addOnChange(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        pojo.doubleValueProperty().addOnChange((ChangeListener<Double>) e -> System.out.println("DoubleProperty: " + e.getOldValue() + " -> " + e.getValue()));
 
-        doubleProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        doubleProperty.addListener((ChangeListener<Double>) e -> System.out.println("DoubleProperty: " + e.getOldValue() + " -> " + e.getValue()));
 
-        objectProperty.addListener(e -> System.out.println(e.getOldValue() + " -> " + e.getValue()));
+        objectProperty.addListener((ChangeListener<String>) e -> System.out.println("ObjectProperty<String>: " + e.getOldValue() + " -> " + e.getValue()));
+
 
 
         // Set values
