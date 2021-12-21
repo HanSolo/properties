@@ -1,13 +1,11 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'idea'
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id 'com.google.osdetector'           version '1.7.0'
     id 'org.javamodularity.moduleplugin' version '1.8.8'
-    id 'org.beryx.jlink'                 version '2.24.1'
+    id 'org.beryx.jlink'                 version '2.24.4'
     id 'net.nemerosa.versioning'         version '2.14.0'
     id 'biz.aQute.bnd.builder'           version '5.3.0'
 }
@@ -16,14 +14,14 @@ apply plugin: 'biz.aQute.bnd.builder'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-description = 'Properties offers properties'
-mainClassName = "$moduleName/eu.hansolo.properties.Demo"
+description = 'Properties offers JavaFX like properties incl. binding'
+mainClassName = "$moduleName/eu.hansolo.properties/Demo"
 
 Date buildTimeAndDate = new Date()
 ext {
-    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
-    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
-    platform        = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
+    moduleName      = 'eu.hansolo.properties'
+    buildDate       = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime       = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
     ciOssrhUsername = System.getenv('OSSRH_USERNAME')
     ciOssrhPassword = System.getenv('OSSRH_PASSWORD')
     ciGHUser        = System.getenv('GH_USER')
@@ -39,7 +37,16 @@ repositories {
 dependencies {
 }
 
+
 jar {
+    from {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        configurations.runtimeClasspath.collect {  it.isDirectory() ? it : zipTree(it)  }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
     manifest {
         attributes(
                 'Built-By'              : System.properties['user.name'],
@@ -55,9 +62,18 @@ jar {
                 'Bundle-License'        : 'https://www.apache.org/licenses/LICENSE-2.0;description=Apache License Version 2.0;link=https://spdx.org/licenses/Apache-2.0.html',
                 'Bundle-Description'    : description,
                 'Bundle-SymbolicName'   : 'eu.hansolo.properties',
-                'Export-Package'        : 'eu.hansolo.properties'
+                'Export-Package'        : 'eu.hansolo.properties',
+                'Class-Path'            : '${project.name}-${project.version}.jar',
+                'Main-Class'            : 'eu.hansolo.properties.Demo'
         )
     }
+}
+
+
+// start the demo from gradle
+task Demo(type: JavaExec) {
+    main = "eu.hansolo.properties/Demo"
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 // create one jar for the javadoc
@@ -107,8 +123,8 @@ publishing {
             }
 
             pom {
-                name = 'properties'
-                description = 'A Java library that offers properties'
+                name = 'EVT'
+                description = 'Properties offers JavaFX like properties incl. binding'
                 url = "https://github.com/HanSolo/properties/wiki"
                 licenses {
                     license {

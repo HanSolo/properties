@@ -8,9 +8,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: foojayio/setup-java@disco
         with:
-          java-version: 11.0.12
+          java-version: 17.0.1
       - name: Build with Gradle
         run: ./gradlew build
