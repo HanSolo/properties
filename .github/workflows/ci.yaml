@@ -1,0 +1,21 @@
+--- # Begin of file
+# Properties Github Actions
+
+name: Java CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: foojayio/setup-java@disco
+        with:
+          java-version: 11.0.12
+      - name: Build with Gradle
+        run: ./gradlew build
+        
+... # End of file
